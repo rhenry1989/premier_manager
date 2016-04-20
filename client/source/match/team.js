@@ -13,20 +13,38 @@ var teamProto = {
 
   pass: function() {
     var player = this.playerInPossession();
+    this.calcTeamMateDistances( player );
     var receiver = this.playerToPass( player ); 
-    // player.losePossession();
-    // receiver.gainPossession();
+    player.losePossession();
+    receiver.gainPossession();
+    receiver.resetDistanceFromPossession();
   },
 
-  playerToPass: function( playerInPossession ) {
-    for ( player of this.players ) {
-      if ( player.possession === false ) {
-        var diffX = Math.abs( playerInPossession.posX - player.posX );
-        var diffY = Math.abs( playerInPossession.posY - player.posY );
-        player.distanceFromPossPlayer = Math.sqrt( diffX*diffX + diffY*diffY );
+  calcTeamMateDistances: function( playerInPossession ) {
+    for ( teamMate of this.players ) {
+      if ( teamMate.possession === false ) {
+        var distance = this.distanceFromPossession( playerInPossession, teamMate );
+        teamMate.distanceFromPossession = distance;
       }
     }
-    
+  },
+
+  playerToPass: function( player ) {
+    if ( player.passing >= 15 ) {
+      return _.maxBy( this.players, function( player ) {
+        return player.distanceFromPossession
+      });
+    } else if ( player.passing < 15 ) {
+      return _.minBy( this.players, function( player ) {
+        return player.distanceFromPossession
+      })
+    }
+  },
+
+  distanceFromPossession: function( playerInPossession, teamMate ) {
+    var diffX = Math.abs( playerInPossession.posX - teamMate.posX );
+    var diffY = Math.abs( playerInPossession.posY - teamMate.posY );
+    return Math.sqrt( diffX*diffX + diffY*diffY );
   },
 
   playerInPossession: function() {

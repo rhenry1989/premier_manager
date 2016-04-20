@@ -5,7 +5,7 @@ var Player = function( options ) {
   player.posX = null;
   player.posY = null;
   player.possession = false;
-  player.distanceFromPossPlayer = null;
+  player.distanceFromPossession = null;
   return player;
 }
 
@@ -17,6 +17,12 @@ var playerProto = {
     return this;
   },
 
+  clearPos: function() {
+    this.posX = null;
+    this.posY = null;
+    return this;
+  },
+
   gainPossession: function() {
     this.possession = true;
     return this;
@@ -24,6 +30,11 @@ var playerProto = {
 
   losePossession: function() {
     this.possession = false;
+    return this;
+  },
+
+  resetDistanceFromPossession: function() {
+    this.distanceFromPossession = null;
     return this;
   }
 
