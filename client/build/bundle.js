@@ -48,48 +48,57 @@
 	var Player = __webpack_require__( 3 );
 	var Ball = __webpack_require__( 4 );
 	var Team = __webpack_require__( 5 );
+	var Decision = __webpack_require__( 6 );
 	
 	window.onload = function() {
 	
 	  var player1 = Player( {name:'Rick Henry', passing: 20} ).setPos( 10, 10 );
 	  player1.gainPossession();
 	  var player2 = Player( {name:'Leo Messi', passing: 16} ).setPos( 50, 50 );
-	  var player3 = Player( {name:'Jon Henry', passing: 15} ).setPos( 100, 100 );
+	  var player3 = Player( {name:'Jon Henry', passing: 5} ).setPos( 100, 100 );
 	
 	  var team = Team();
 	  team.addPlayer( player1 );
 	  team.addPlayer( player2 );
 	  team.addPlayer( player3 );
 	
-	  team.pass();
+	  var decision = Decision();
+	  decision.addPlayers( team.players );
+	  decision.update();
+	  decision.pass.make();
+	  decision.update();
 	
-	  var ball = Ball();
+	  console.log( decision )
 	
-	  var pitch = document.getElementById( 'pitch' );
-	  var ctx = pitch.getContext( '2d' );
+	  // team.pass();
 	
-	  var drawPlayer = function( x, y ) {
-	    ctx.beginPath();
-	    ctx.arc(x,y,10,0,Math.PI*2,true); // Outer circle
-	    ctx.stroke();
-	  }
 	
-	  var drawBall = function( x, y ) {
-	    ctx.beginPath();
-	    ctx.arc( player.posX + 15, player.posY, ball.size, 0, 2 * Math.PI);
-	    ctx.stroke();
-	  }
 	
-	  var drawLine = function() {
+	  // var pitch = document.getElementById( 'pitch' );
+	  // var ctx = pitch.getContext( '2d' );
+	
+	  // var drawPlayer = function( x, y ) {
+	  //   ctx.beginPath();
+	  //   ctx.arc(x,y,10,0,Math.PI*2,true); // Outer circle
+	  //   ctx.stroke();
+	  // }
+	
+	  // var drawBall = function( x, y ) {
+	  //   ctx.beginPath();
+	  //   ctx.arc( player.posX + 15, player.posY, ball.size, 0, 2 * Math.PI);
+	  //   ctx.stroke();
+	  // }
+	
+	  // var drawLine = function() {
 	    
-	  }
+	  // }
 	
-	  for ( player of team.players ) {
-	    drawPlayer( player.posX, player.posY ); 
-	    if ( player.possession ) {
-	      drawBall( player.posX, player.posY );
-	    }
-	  }
+	  // for ( player of team.players ) {
+	  //   drawPlayer( player.posX, player.posY ); 
+	  //   if ( player.possession ) {
+	  //     drawBall( player.posX, player.posY );
+	  //   }
+	  // }
 	
 	
 	
@@ -16227,51 +16236,109 @@
 	    return this;
 	  },
 	
-	  pass: function() {
-	    var player = this.playerInPossession();
-	    this.calcTeamMateDistances( player );
-	    var receiver = this.playerToPass( player ); 
-	    player.losePossession();
-	    receiver.gainPossession();
-	    receiver.resetDistanceFromPossession();
+	}
+	
+	module.exports = Team;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pass = __webpack_require__( 7 );
+	
+	var Decision = function() {
+	  var decision = Object.create( decisionProto );
+	  decision.players = [];
+	  decision.player = null;
+	  decision.pass = pass( decision.player, decision.players );
+	  return decision;
+	}
+	
+	var decisionProto = {
+	
+	  addPlayer: function( player ) {
+	    this.players.push( player );
+	    return this;
 	  },
 	
-	  calcTeamMateDistances: function( playerInPossession ) {
-	    for ( teamMate of this.players ) {
-	      if ( teamMate.possession === false ) {
-	        var distance = this.distanceFromPossession( playerInPossession, teamMate );
-	        teamMate.distanceFromPossession = distance;
+	  addPlayers: function( players ) {
+	    for ( player of players ) {
+	      this.addPlayer( player );
+	    }
+	  },
+	
+	  update: function() {
+	    this.findPlayerInPossession();
+	    this.playerDistances();
+	  },
+	
+	  findPlayerInPossession: function() {
+	    for ( player of this.players ) {
+	      if ( player.possession === true ) { 
+	        this.player = player;
+	        this.pass.updatePlayer( this.player ) 
 	      }
 	    }
 	  },
 	
-	  playerToPass: function( player ) {
-	    if ( player.passing >= 15 ) {
-	      return _.maxBy( this.players, function( player ) {
-	        return player.distanceFromPossession
-	      });
-	    } else if ( player.passing < 15 ) {
-	      return _.minBy( this.players, function( player ) {
-	        return player.distanceFromPossession
-	      })
-	    }
-	  },
-	
-	  distanceFromPossession: function( playerInPossession, teamMate ) {
-	    var diffX = Math.abs( playerInPossession.posX - teamMate.posX );
-	    var diffY = Math.abs( playerInPossession.posY - teamMate.posY );
+	  distanceFromPossession: function( player ) {
+	    var diffX = Math.abs( this.player.posX - player.posX );
+	    var diffY = Math.abs( this.player.posY - player.posY );
 	    return Math.sqrt( diffX*diffX + diffY*diffY );
 	  },
 	
-	  playerInPossession: function() {
+	  playerDistances: function() {
 	    for ( player of this.players ) {
-	      if ( player.possession === true ) { return player; }
+	      if ( player.possession === false ) {
+	        var distance = this.distanceFromPossession( player );
+	        player.distanceFromPossession = distance;
+	      }
 	    }
 	  }
 	
 	}
 	
-	module.exports = Team;
+	module.exports = Decision;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	var Pass = function( player, players ) {
+	  var pass = Object.create( passProto );
+	  pass.players = players;
+	  pass.player = player;
+	  return pass;
+	}
+	
+	var passProto = {
+	
+	  make: function() {
+	    var receiver = this.select(); 
+	    this.player.losePossession();
+	    receiver.gainPossession();
+	    receiver.resetDistanceFromPossession();
+	  },
+	
+	  updatePlayer: function( player ) {
+	    this.player = player
+	  },
+	
+	  select: function() {
+	    if ( this.player.passing >= 15 ) {
+	      return _.maxBy( this.players, function( player ) {
+	        return player.distanceFromPossession
+	      });
+	    } else if ( this.player.passing < 15 ) {
+	      return _.minBy( this.players, function( player ) {
+	        return player.distanceFromPossession
+	      })
+	    }
+	  }
+	
+	}
+	
+	module.exports = Pass
 
 /***/ }
 /******/ ]);
