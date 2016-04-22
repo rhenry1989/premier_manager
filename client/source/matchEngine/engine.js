@@ -1,14 +1,27 @@
 var pass = require( './pass' );
 
-var Decision = function() {
-  var decision = Object.create( decisionProto );
-  decision.players = [];
-  decision.player = null;
-  decision.pass = pass( decision.player, decision.players );
-  return decision;
+var Engine = function( pitchView ) {
+  var engine = Object.create( engineProto );
+  engine.players = [];
+  engine.player = null;
+  engine.pass = pass();
+  engine.pitchView = pitchView;
+  return engine;
 }
 
-var decisionProto = {
+var engineProto = {
+
+  updateView: function() {
+    this.pitchView.updatePlayers( this.players )
+    this.pitchView.drawPlayers();
+  },
+
+  makePass: function() {
+    this.pass.attempt( this.player, this.players[1] );
+    this.updateState();
+    this.pitchView.updateState( 1, 1, this.players[1].posX, this.players[1].posY );
+    this.pitchView.moveBall();
+  },
 
   addPlayer: function( player ) {
     this.players.push( player );
@@ -21,7 +34,7 @@ var decisionProto = {
     }
   },
 
-  update: function() {
+  updateState: function() {
     this.findPlayerInPossession();
     this.playerDistances();
   },
@@ -29,8 +42,7 @@ var decisionProto = {
   findPlayerInPossession: function() {
     for ( player of this.players ) {
       if ( player.possession === true ) { 
-        this.player = player;
-        this.pass.updatePlayer( this.player ) 
+        this.player = player; 
       }
     }
   },
@@ -52,4 +64,4 @@ var decisionProto = {
 
 }
 
-module.exports = Decision;
+module.exports = Engine;

@@ -1,33 +1,24 @@
-var Pass = function( player, players ) {
+var Pass = function() {
   var pass = Object.create( passProto );
-  pass.players = players;
-  pass.player = player;
+  pass.toPlayer;
+  pass.fromPlayer;
   return pass;
 }
 
 var passProto = {
 
-  make: function() {
-    var receiver = this.select(); 
-    this.player.losePossession();
-    receiver.gainPossession();
-    receiver.resetDistanceFromPossession();
+  attempt: function( fromPlayer, toPlayer ) {
+    this.fromPlayer = fromPlayer;
+    this.toPlayer = toPlayer;
+    this.fromPlayer.losePossession();
+    this.toPlayer.gainPossession();
+    this.toPlayer.resetDistanceFromPossession();
   },
 
-  updatePlayer: function( player ) {
-    this.player = player
-  },
-
-  select: function() {
-    if ( this.player.passing >= 15 ) {
-      return _.maxBy( this.players, function( player ) {
-        return player.distanceFromPossession
-      });
-    } else if ( this.player.passing < 15 ) {
-      return _.minBy( this.players, function( player ) {
-        return player.distanceFromPossession
-      })
-    }
+  calcRatio: function() {
+    var y = Math.abs( this.fromPlayer.posY - this.toPlayer.posY ) 
+    var x = Math.abs( this.fromPlayer.posX - this.toPlayer.posX ) 
+    return y / x
   }
 
 }
