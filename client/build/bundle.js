@@ -48,8 +48,8 @@
 	var Player = __webpack_require__( 3 );
 	var Ball = __webpack_require__( 4 );
 	var Team = __webpack_require__( 5 );
-	var Engine = __webpack_require__( 9 );
-	var PitchView = __webpack_require__( 8 )
+	var Engine = __webpack_require__( 6 );
+	var MatchView = __webpack_require__( 8 );
 	
 	window.onload = function() {
 	
@@ -64,10 +64,10 @@
 	  var ball = Ball()
 	  ball.setPos( player1.posX, player1.posY );
 	
-	  var pitchView = PitchView( ball );
-	  pitchView.setup();
+	  var matchView = MatchView( ball );
+	  matchView.setup();
 	
-	  var engine = Engine( pitchView );
+	  var engine = Engine( matchView );
 	  engine.addPlayers( team.players );  
 	  engine.updateState();  
 	  engine.updateView();
@@ -16228,108 +16228,7 @@
 	module.exports = Team;
 
 /***/ },
-/* 6 */,
-/* 7 */
-/***/ function(module, exports) {
-
-	var Pass = function() {
-	  var pass = Object.create( passProto );
-	  pass.toPlayer;
-	  pass.fromPlayer;
-	  return pass;
-	}
-	
-	var passProto = {
-	
-	  attempt: function( fromPlayer, toPlayer ) {
-	    this.fromPlayer = fromPlayer;
-	    this.toPlayer = toPlayer;
-	    this.fromPlayer.losePossession();
-	    this.toPlayer.gainPossession();
-	    this.toPlayer.resetDistanceFromPossession();
-	  },
-	
-	  calcRatio: function() {
-	    var y = Math.abs( this.fromPlayer.posY - this.toPlayer.posY ) 
-	    var x = Math.abs( this.fromPlayer.posX - this.toPlayer.posX ) 
-	    return y / x
-	  }
-	
-	}
-	
-	module.exports = Pass
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	var PitchView = function( ball) {
-	  var pitchView = Object.create( PitchViewProto );
-	  pitchView.ball = ball;
-	  pitchView.players;
-	  pitchView.canvas;
-	  pitchView.ctx;
-	  pitchView.destX;
-	  pitchView.destY;
-	  pitchView.rX;
-	  pitchView.rY;
-	  return pitchView;
-	}
-	
-	var PitchViewProto = {
-	  
-	  setup: function() {
-	    this.canvas = document.getElementById( 'pitch' );
-	    this.ctx = pitch.getContext( '2d' );
-	  },
-	
-	  updateState: function( destX, destY, rX, rY ) {
-	    this.destX = destX;
-	    this.destY = destY;
-	    this.rX = rX;
-	    this.rY = rY; 
-	  },
-	
-	  updatePlayers: function( players ) {
-	    this.players = players
-	  },
-	
-	  clear: function() {
-	    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	  },
-	
-	  drawBall: function( x, y ){
-	    this.ctx.beginPath();
-	    this.ctx.arc( x, y, 5, 0, 2 * Math.PI );
-	    this.ctx.stroke();
-	  },
-	
-	  drawPlayers: function() {
-	    for ( player of this.players ) {
-	      this.ctx.beginPath();
-	      this.ctx.arc( player.posX, player.posY,10,0,Math.PI*2,true );
-	      this.ctx.stroke();
-	    }
-	  },
-	
-	  moveBall: function() {
-	    this.clear();
-	    this.drawPlayers();
-	    this.drawBall( this.ball.posX, this.ball.posY );
-	    this.ball.posX = this.ball.posX + 1;
-	    this.ball.posY = this.ball.posY + 1;
-	    if( this.ball.posX === this.rX && this.ball.posY === this.rY ) { return; }
-	    requestAnimationFrame( this.moveBall.bind( this ) );
-	  }
-	
-	
-	
-	}
-	
-	module.exports = PitchView;
-
-/***/ },
-/* 9 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pass = __webpack_require__( 7 );
@@ -16399,6 +16298,153 @@
 	}
 	
 	module.exports = Engine;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	var Pass = function() {
+	  var pass = Object.create( passProto );
+	  pass.toPlayer;
+	  pass.fromPlayer;
+	  return pass;
+	}
+	
+	var passProto = {
+	
+	  attempt: function( fromPlayer, toPlayer ) {
+	    this.fromPlayer = fromPlayer;
+	    this.toPlayer = toPlayer;
+	    this.fromPlayer.losePossession();
+	    this.toPlayer.gainPossession();
+	    this.toPlayer.resetDistanceFromPossession();
+	  },
+	
+	  calcRatio: function() {
+	    var y = Math.abs( this.fromPlayer.posY - this.toPlayer.posY ) 
+	    var x = Math.abs( this.fromPlayer.posX - this.toPlayer.posX ) 
+	    return y / x
+	  }
+	
+	}
+	
+	module.exports = Pass
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var PitchView = __webpack_require__( 9 );
+	
+	var MatchView = function( ball ) {
+	  var matchView = Object.create( MatchViewProto );
+	  matchView.ball = ball;
+	  matchView.players;
+	  matchView.canvas;
+	  matchView.ctx;
+	  matchView.destX;
+	  matchView.destY;
+	  matchView.rX;
+	  matchView.rY;
+	  matchView.pitchView = PitchView( matchView.ctx );
+	  return matchView;
+	}
+	
+	var MatchViewProto = {
+	  
+	  setup: function() {
+	    this.canvas = document.getElementById( 'pitch' );
+	    this.ctx = pitch.getContext( '2d' );
+	  },
+	
+	  updateState: function( destX, destY, rX, rY ) {
+	    this.destX = destX;
+	    this.destY = destY;
+	    this.rX = rX;
+	    this.rY = rY; 
+	  },
+	
+	  updatePlayers: function( players ) {
+	    this.players = players
+	  },
+	
+	  clear: function() {
+	    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	  },
+	
+	  drawBall: function( x, y ){
+	    this.ctx.beginPath();
+	    this.ctx.arc( x, y, 5, 0, 2 * Math.PI );
+	    this.ctx.stroke();
+	  },
+	
+	  drawPlayers: function() {
+	    for ( player of this.players ) {
+	      this.ctx.beginPath();
+	      this.ctx.arc( player.posX, player.posY,10,0,Math.PI*2,true );
+	      this.ctx.stroke();
+	    }
+	  },
+	
+	  moveBall: function() {
+	    this.clear();
+	    this.pitchView.draw();
+	    this.drawPlayers();
+	    this.drawBall( this.ball.posX, this.ball.posY );
+	    this.ball.posX = this.ball.posX + 1;
+	    this.ball.posY = this.ball.posY + 1;
+	    if( this.ball.posX === this.rX && this.ball.posY === this.rY ) { return; }
+	    requestAnimationFrame( this.moveBall.bind( this ) );
+	  }
+	
+	
+	
+	}
+	
+	module.exports = MatchView;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	var PitchView = function() {
+	  var pitchView = Object.create( PitchViewProto );
+	  pitchView.ctx;
+	  pitchView.canvas;
+	  return pitchView;
+	}
+	
+	var PitchViewProto = {
+	
+	  draw: function() {
+	    this.drawPattern;
+	    this.drawPitch;
+	  },
+	
+	  drawRect: function( col, x, y, l, h ) {
+	    this.ctx.strokeStyle = col;
+	    this.ctx.strokeRect(x, y, l, h);
+	  },
+	
+	  drawPitch: function() {
+	    this.drawRect("#FFFFFF", 20,20,1050,580);
+	    this.drawRect("#FFFFFF", 20,85, 180,440);
+	    this.drawRect("#FFFFFF", 890,85, 180,440);
+	    this.drawRect("#FFFFFF", 20,210, 60,200);
+	  },
+	
+	  drawPattern: function() {
+	    var i = 0;
+	    while ( i < 1090 ) {
+	      this.ctx.fillStyle="#1A8700";
+	      this.ctx.fillRect( 0, i, 1090, 100 );
+	      i = i + 206;
+	    }
+	  },
+	
+	}
+	
+	module.exports = PitchView;
 
 /***/ }
 /******/ ]);

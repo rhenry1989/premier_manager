@@ -1,63 +1,37 @@
-var PitchView = function( ball) {
+var PitchView = function() {
   var pitchView = Object.create( PitchViewProto );
-  pitchView.ball = ball;
-  pitchView.players;
-  pitchView.canvas;
   pitchView.ctx;
-  pitchView.destX;
-  pitchView.destY;
-  pitchView.rX;
-  pitchView.rY;
+  pitchView.canvas;
   return pitchView;
 }
 
 var PitchViewProto = {
-  
-  setup: function() {
-    this.canvas = document.getElementById( 'pitch' );
-    this.ctx = pitch.getContext( '2d' );
+
+  draw: function() {
+    this.drawPattern;
+    this.drawPitch;
   },
 
-  updateState: function( destX, destY, rX, rY ) {
-    this.destX = destX;
-    this.destY = destY;
-    this.rX = rX;
-    this.rY = rY; 
+  drawRect: function( col, x, y, l, h ) {
+    this.ctx.strokeStyle = col;
+    this.ctx.strokeRect(x, y, l, h);
   },
 
-  updatePlayers: function( players ) {
-    this.players = players
+  drawPitch: function() {
+    this.drawRect("#FFFFFF", 20,20,1050,580);
+    this.drawRect("#FFFFFF", 20,85, 180,440);
+    this.drawRect("#FFFFFF", 890,85, 180,440);
+    this.drawRect("#FFFFFF", 20,210, 60,200);
   },
 
-  clear: function() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  },
-
-  drawBall: function( x, y ){
-    this.ctx.beginPath();
-    this.ctx.arc( x, y, 5, 0, 2 * Math.PI );
-    this.ctx.stroke();
-  },
-
-  drawPlayers: function() {
-    for ( player of this.players ) {
-      this.ctx.beginPath();
-      this.ctx.arc( player.posX, player.posY,10,0,Math.PI*2,true );
-      this.ctx.stroke();
+  drawPattern: function() {
+    var i = 0;
+    while ( i < 1090 ) {
+      this.ctx.fillStyle="#1A8700";
+      this.ctx.fillRect( 0, i, 1090, 100 );
+      i = i + 206;
     }
   },
-
-  moveBall: function() {
-    this.clear();
-    this.drawPlayers();
-    this.drawBall( this.ball.posX, this.ball.posY );
-    this.ball.posX = this.ball.posX + 1;
-    this.ball.posY = this.ball.posY + 1;
-    if( this.ball.posX === this.rX && this.ball.posY === this.rY ) { return; }
-    requestAnimationFrame( this.moveBall.bind( this ) );
-  }
-
-
 
 }
 

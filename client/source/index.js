@@ -3,7 +3,7 @@ var Player = require( './player/player' );
 var Ball = require( './matchEngine/ball' );
 var Team = require( './matchEngine/team' );
 var Engine = require( './matchEngine/engine' );
-var PitchView = require( './view/pitchView' )
+var MatchView = require( './view/matchView' );
 
 window.onload = function() {
 
@@ -18,10 +18,10 @@ window.onload = function() {
   var ball = Ball()
   ball.setPos( player1.posX, player1.posY );
 
-  var pitchView = PitchView( ball );
-  pitchView.setup();
+  var matchView = MatchView( ball );
+  matchView.setup();
 
-  var engine = Engine( pitchView );
+  var engine = Engine( matchView );
   engine.addPlayers( team.players );  
   engine.updateState();  
   engine.updateView();
