@@ -1,15 +1,15 @@
-var PitchView = function() {
+var PitchView = function( canvas, ctx ) {
   var pitchView = Object.create( PitchViewProto );
-  pitchView.ctx;
-  pitchView.canvas;
+  pitchView.ctx = ctx;
+  pitchView.canvas = canvas;
   return pitchView;
 }
 
 var PitchViewProto = {
 
   draw: function() {
-    this.drawPattern;
-    this.drawPitch;
+    this.drawPattern();
+    this.drawPitch();
   },
 
   drawRect: function( col, x, y, l, h ) {

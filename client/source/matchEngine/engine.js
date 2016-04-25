@@ -1,26 +1,26 @@
 var pass = require( './pass' );
 
-var Engine = function( pitchView ) {
+var Engine = function( matchView ) {
   var engine = Object.create( engineProto );
   engine.players = [];
   engine.player = null;
   engine.pass = pass();
-  engine.pitchView = pitchView;
+  engine.matchView = matchView;
   return engine;
 }
 
 var engineProto = {
 
   updateView: function() {
-    this.pitchView.updatePlayers( this.players )
-    this.pitchView.drawPlayers();
+    this.matchView.updatePlayers( this.players )
+    this.matchView.drawPlayers();
   },
 
   makePass: function() {
-    this.pass.attempt( this.player, this.players[1] );
+    var pass = this.pass.attempt( this.player, this.players[1] );
     this.updateState();
-    this.pitchView.updateState( 1, 1, this.players[1].posX, this.players[1].posY );
-    this.pitchView.moveBall();
+    this.matchView.updateState( this.players[1].posX, this.players[1].posY );
+    this.matchView.moveBall( pass );
   },
 
   addPlayer: function( player ) {

@@ -9,7 +9,7 @@ window.onload = function() {
 
   var player1 = Player( {name:'Rick Henry', passing: 20} ).setPos( 40, 40 );
   player1.gainPossession();
-  var player2 = Player( {name:'Jon Henry', passing: 5} ).setPos( 80, 80 );
+  var player2 = Player( {name:'Jon Henry', passing: 5} ).setPos( 100, 100 );
 
   var team = Team();
   team.addPlayer( player1 );
@@ -26,9 +26,5 @@ window.onload = function() {
   engine.updateState();  
   engine.updateView();
   engine.makePass();
-
-  // engine.pass.attempt( player1, player2 );
-  // engine.update();
-
 
 }

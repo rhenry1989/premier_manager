@@ -55,7 +55,7 @@
 	
 	  var player1 = Player( {name:'Rick Henry', passing: 20} ).setPos( 40, 40 );
 	  player1.gainPossession();
-	  var player2 = Player( {name:'Jon Henry', passing: 5} ).setPos( 80, 80 );
+	  var player2 = Player( {name:'Jon Henry', passing: 5} ).setPos( 100, 100 );
 	
 	  var team = Team();
 	  team.addPlayer( player1 );
@@ -72,10 +72,6 @@
 	  engine.updateState();  
 	  engine.updateView();
 	  engine.makePass();
-	
-	  // engine.pass.attempt( player1, player2 );
-	  // engine.update();
-	
 	
 	}
 
@@ -16233,27 +16229,27 @@
 
 	var pass = __webpack_require__( 7 );
 	
-	var Engine = function( pitchView ) {
+	var Engine = function( matchView ) {
 	  var engine = Object.create( engineProto );
 	  engine.players = [];
 	  engine.player = null;
 	  engine.pass = pass();
-	  engine.pitchView = pitchView;
+	  engine.matchView = matchView;
 	  return engine;
 	}
 	
 	var engineProto = {
 	
 	  updateView: function() {
-	    this.pitchView.updatePlayers( this.players )
-	    this.pitchView.drawPlayers();
+	    this.matchView.updatePlayers( this.players )
+	    this.matchView.drawPlayers();
 	  },
 	
 	  makePass: function() {
-	    this.pass.attempt( this.player, this.players[1] );
+	    var pass = this.pass.attempt( this.player, this.players[1] );
 	    this.updateState();
-	    this.pitchView.updateState( 1, 1, this.players[1].posX, this.players[1].posY );
-	    this.pitchView.moveBall();
+	    this.matchView.updateState( this.players[1].posX, this.players[1].posY );
+	    this.matchView.moveBall( pass );
 	  },
 	
 	  addPlayer: function( player ) {
@@ -16307,6 +16303,9 @@
 	  var pass = Object.create( passProto );
 	  pass.toPlayer;
 	  pass.fromPlayer;
+	  pass.distance;
+	  pass.directionX;
+	  pass.directionY;
 	  return pass;
 	}
 	
@@ -16315,15 +16314,20 @@
 	  attempt: function( fromPlayer, toPlayer ) {
 	    this.fromPlayer = fromPlayer;
 	    this.toPlayer = toPlayer;
+	    this.getPoints();
+	    this.updatePossessions();
+	    return this;
+	  },
+	
+	  updatePossessions: function() {
 	    this.fromPlayer.losePossession();
 	    this.toPlayer.gainPossession();
 	    this.toPlayer.resetDistanceFromPossession();
 	  },
 	
-	  calcRatio: function() {
-	    var y = Math.abs( this.fromPlayer.posY - this.toPlayer.posY ) 
-	    var x = Math.abs( this.fromPlayer.posX - this.toPlayer.posX ) 
-	    return y / x
+	  getPoints: function() {
+	    this.directionX = this.fromPlayer.posX - this.toPlayer.posX;
+	    this.directionY = this.fromPlayer.posY - this.toPlayer.posY;
 	  }
 	
 	}
@@ -16342,11 +16346,11 @@
 	  matchView.players;
 	  matchView.canvas;
 	  matchView.ctx;
-	  matchView.destX;
-	  matchView.destY;
-	  matchView.rX;
-	  matchView.rY;
-	  matchView.pitchView = PitchView( matchView.ctx );
+	  matchView.toX;
+	  matchView.toY;
+	  matchView.ratioY;
+	  matchView.ratioX;
+	  matchView.pitchView;
 	  return matchView;
 	}
 	
@@ -16355,13 +16359,12 @@
 	  setup: function() {
 	    this.canvas = document.getElementById( 'pitch' );
 	    this.ctx = pitch.getContext( '2d' );
+	    this.pitchView = PitchView( this.canvas, this.ctx );
 	  },
 	
-	  updateState: function( destX, destY, rX, rY ) {
-	    this.destX = destX;
-	    this.destY = destY;
-	    this.rX = rX;
-	    this.rY = rY; 
+	  updateState: function( toX, toY ) {
+	    this.toX = toX;
+	    this.toY = toY;
 	  },
 	
 	  updatePlayers: function( players ) {
@@ -16386,14 +16389,22 @@
 	    }
 	  },
 	
-	  moveBall: function() {
+	  setPoints: function( move ) {
+	    if ( move.directionX < 0 && move.directionY < 0 ) {
+	      this.ratioX = 1;
+	      this.ratioY = Math.abs( move.directionY / move.directionX );
+	    }
+	  },
+	
+	  moveBall: function( move ) {
 	    this.clear();
+	    this.setPoints( move );
 	    this.pitchView.draw();
 	    this.drawPlayers();
 	    this.drawBall( this.ball.posX, this.ball.posY );
-	    this.ball.posX = this.ball.posX + 1;
-	    this.ball.posY = this.ball.posY + 1;
-	    if( this.ball.posX === this.rX && this.ball.posY === this.rY ) { return; }
+	    this.ball.posX = this.ball.posX + this.ratioX;
+	    this.ball.posY = this.ball.posY + this.ratioY;
+	    if( this.ball.posX === this.toX && this.ball.posY === this.toY ) { return; }
 	    requestAnimationFrame( this.moveBall.bind( this ) );
 	  }
 	
@@ -16407,18 +16418,18 @@
 /* 9 */
 /***/ function(module, exports) {
 
-	var PitchView = function() {
+	var PitchView = function( canvas, ctx ) {
 	  var pitchView = Object.create( PitchViewProto );
-	  pitchView.ctx;
-	  pitchView.canvas;
+	  pitchView.ctx = ctx;
+	  pitchView.canvas = canvas;
 	  return pitchView;
 	}
 	
 	var PitchViewProto = {
 	
 	  draw: function() {
-	    this.drawPattern;
-	    this.drawPitch;
+	    this.drawPattern();
+	    this.drawPitch();
 	  },
 	
 	  drawRect: function( col, x, y, l, h ) {

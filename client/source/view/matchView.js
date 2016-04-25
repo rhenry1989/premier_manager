@@ -6,11 +6,11 @@ var MatchView = function( ball ) {
   matchView.players;
   matchView.canvas;
   matchView.ctx;
-  matchView.destX;
-  matchView.destY;
-  matchView.rX;
-  matchView.rY;
-  matchView.pitchView = PitchView( matchView.ctx );
+  matchView.toX;
+  matchView.toY;
+  matchView.ratioY;
+  matchView.ratioX;
+  matchView.pitchView;
   return matchView;
 }
 
@@ -19,13 +19,12 @@ var MatchViewProto = {
   setup: function() {
     this.canvas = document.getElementById( 'pitch' );
     this.ctx = pitch.getContext( '2d' );
+    this.pitchView = PitchView( this.canvas, this.ctx );
   },
 
-  updateState: function( destX, destY, rX, rY ) {
-    this.destX = destX;
-    this.destY = destY;
-    this.rX = rX;
-    this.rY = rY; 
+  updateState: function( toX, toY ) {
+    this.toX = toX;
+    this.toY = toY;
   },
 
   updatePlayers: function( players ) {
@@ -50,14 +49,22 @@ var MatchViewProto = {
     }
   },
 
-  moveBall: function() {
+  setPoints: function( move ) {
+    if ( move.directionX < 0 && move.directionY < 0 ) {
+      this.ratioX = 1;
+      this.ratioY = Math.abs( move.directionY / move.directionX );
+    }
+  },
+
+  moveBall: function( move ) {
     this.clear();
+    this.setPoints( move );
     this.pitchView.draw();
     this.drawPlayers();
     this.drawBall( this.ball.posX, this.ball.posY );
-    this.ball.posX = this.ball.posX + 1;
-    this.ball.posY = this.ball.posY + 1;
-    if( this.ball.posX === this.rX && this.ball.posY === this.rY ) { return; }
+    this.ball.posX = this.ball.posX + this.ratioX;
+    this.ball.posY = this.ball.posY + this.ratioY;
+    if( this.ball.posX === this.toX && this.ball.posY === this.toY ) { return; }
     requestAnimationFrame( this.moveBall.bind( this ) );
   }
 
