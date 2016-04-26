@@ -56,6 +56,13 @@ var MatchViewProto = {
     }
   },
 
+  hitsTarget: function() {
+    if ( this.ball.posX === this.toX ) {
+      return true;
+    }
+    return false;
+  },
+
   moveBall: function( move ) {
     this.clear();
     this.setPoints( move );
@@ -64,7 +71,7 @@ var MatchViewProto = {
     this.drawBall( this.ball.posX, this.ball.posY );
     this.ball.posX = this.ball.posX + this.ratioX;
     this.ball.posY = this.ball.posY + this.ratioY;
-    if( this.ball.posX === this.toX && this.ball.posY === this.toY ) { return; }
+    if( this.hitsTarget() ) { return; }
     requestAnimationFrame( this.moveBall.bind( this ) );
   }
 
