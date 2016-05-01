@@ -3,7 +3,6 @@ var Ball = function() {
   ball.size = 5;
   ball.posX;
   ball.posY;
-  ball.color = 'yellow'
   return ball;
 }
 

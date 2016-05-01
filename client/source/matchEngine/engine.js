@@ -1,26 +1,31 @@
-var pass = require( './pass' );
+var Pass = require( './pass' );
+var Decision = require( './decision' );
 
 var Engine = function( matchView ) {
   var engine = Object.create( engineProto );
   engine.players = [];
-  engine.player = null;
-  engine.pass = pass();
-  engine.matchView = matchView;
+  engine.decision = Decision();
+  engine.pass = Pass();
   return engine;
 }
 
 var engineProto = {
 
-  updateView: function() {
-    this.matchView.updatePlayers( this.players )
-    this.matchView.drawPlayers();
+  play: function() {
+    var i = 0;
+    while ( i < 10 ) {
+      var decision = this.decision.make( this.players );
+      console.log( 'players has decided to', decision.goingTo );
+      if ( decision.goingTo === 'pass' ) {
+        console.log( 'opted to pass from ' + decision.from.name + ' to ' +  decision.to.name )
+        this.makePass( decision );
+      }
+      i++
+    }
   },
 
-  makePass: function() {
-    var pass = this.pass.attempt( this.player, this.players[1] );
-    this.updateState();
-    this.matchView.updateState( this.players[1].posX, this.players[1].posY );
-    this.matchView.moveBall( pass );
+  makePass: function( options ) {
+    this.pass.attempt( options );
   },
 
   addPlayer: function( player ) {
@@ -31,34 +36,6 @@ var engineProto = {
   addPlayers: function( players ) {
     for ( player of players ) {
       this.addPlayer( player );
-    }
-  },
-
-  updateState: function() {
-    this.findPlayerInPossession();
-    this.playerDistances();
-  },
-
-  findPlayerInPossession: function() {
-    for ( player of this.players ) {
-      if ( player.possession === true ) { 
-        this.player = player; 
-      }
-    }
-  },
-
-  distanceFromPossession: function( player ) {
-    var diffX = Math.abs( this.player.posX - player.posX );
-    var diffY = Math.abs( this.player.posY - player.posY );
-    return Math.sqrt( diffX*diffX + diffY*diffY );
-  },
-
-  playerDistances: function() {
-    for ( player of this.players ) {
-      if ( player.possession === false ) {
-        var distance = this.distanceFromPossession( player );
-        player.distanceFromPossession = distance;
-      }
     }
   }
 

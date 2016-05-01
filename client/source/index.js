@@ -1,30 +1,38 @@
+var React = require( 'react' );
+var ReactDOM = require( 'react-dom' );
 var _ = require('lodash');
-var Player = require( './player/player' );
-var Ball = require( './matchEngine/ball' );
-var Team = require( './matchEngine/team' );
-var Engine = require( './matchEngine/engine' );
-var MatchView = require( './view/matchView' );
 
 window.onload = function() {
 
-  var player1 = Player( {name:'Rick Henry', passing: 20} ).setPos( 40, 40 );
-  player1.gainPossession();
-  var player2 = Player( {name:'Jon Henry', passing: 5} ).setPos( 250, 580 );
+  var OpeningScreen = React.createClass({
 
-  var team = Team();
-  team.addPlayer( player1 );
-  team.addPlayer( player2 );
+    render: function() {
+      return (
+        <section className="home-menu-wrapper">
+          <div className="home-menu">
+            <div className="home-menu-logo">
+              Premier Manager
+            </div>
+            <div className="panel">
+              <div className="panel-list-item">
+                New game
+                <i className="fa fa-arrow-circle-o-right __float-right" aria-hidden="true"></i>
+              </div>
+              <div className="panel-list-item">
+                Load game
+                <i className="fa fa-arrow-circle-o-right __float-right" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </section>
+      )
+    }
 
-  var ball = Ball()
-  ball.setPos( player1.posX, player1.posY );
+  });
 
-  var matchView = MatchView( ball );
-  matchView.setup();
-
-  var engine = Engine( matchView );
-  engine.addPlayers( team.players );  
-  engine.updateState();  
-  engine.updateView();
-  engine.makePass();
+  ReactDOM.render(
+    <OpeningScreen />,
+    document.getElementById( 'app' )
+  )
 
 }

@@ -1,7 +1,7 @@
 var Pass = function() {
   var pass = Object.create( passProto );
-  pass.toPlayer;
-  pass.fromPlayer;
+  pass.to;
+  pass.from;
   pass.distance;
   pass.directionX;
   pass.directionY;
@@ -10,23 +10,17 @@ var Pass = function() {
 
 var passProto = {
 
-  attempt: function( fromPlayer, toPlayer ) {
-    this.fromPlayer = fromPlayer;
-    this.toPlayer = toPlayer;
-    this.getPoints();
+  attempt: function( options ) {
+    this.from = options.from;
+    this.to = options.to;
     this.updatePossessions();
     return this;
   },
 
   updatePossessions: function() {
-    this.fromPlayer.losePossession();
-    this.toPlayer.gainPossession();
-    this.toPlayer.resetDistanceFromPossession();
-  },
-
-  getPoints: function() {
-    this.directionX = this.fromPlayer.posX - this.toPlayer.posX;
-    this.directionY = this.fromPlayer.posY - this.toPlayer.posY;
+    this.from.losePossession();
+    this.to.gainPossession();
+    this.to.resetDistanceFromPossession();
   }
 
 }

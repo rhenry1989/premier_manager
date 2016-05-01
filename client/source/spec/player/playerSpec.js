@@ -6,7 +6,12 @@ describe( "Player", function() {
   beforeEach(function() {
     var options = {
       name: 'Rick Henry',
-      passing: 10,
+      technical: {
+        passing: 10
+      },
+      brain: {
+        decisions: 43
+      }
     }
     player = Player( options );
   });

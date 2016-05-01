@@ -1,7 +1,10 @@
 var Player = function( options ) {
   var player = Object.create( playerProto );
+  player.id = options.id;
   player.name = options.name;
-  player.passing = options.passing;
+  player.nation = options.nation;
+  player.technical = options.technical;
+  player.brain = options.brain;
   player.posX = null;
   player.posY = null;
   player.possession = false;

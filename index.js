@@ -1,15 +1,18 @@
-var express = require( 'express' );
+var express = require('express');
 var app = express();
+var path = require('path')
 
-var views = __dirname + '/views/';
-
-app.use( express.static('client/build') );
-
-app.get( '/', function( req, res ) {
-  res.sendFile( views + 'index.html' );
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
-app.listen( 3000, function() {
-  console.log( 'listening on port 3000' );
-})
+app.use(express.static('client/build'));
+
+
+var server = app.listen(3000, function () {
+  var host = server.address().address;
+  var port = server.address().port;
+
+  console.log('Example app listening at http://%s:%s', host, port);
+});
 
