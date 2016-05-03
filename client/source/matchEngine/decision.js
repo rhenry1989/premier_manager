@@ -41,7 +41,7 @@ var decisionProto = {
     for ( player of players ) {
       if ( player.possession === false ) {
         var distance = this.distanceFromPossession( player, playerInPossession );
-        player.distanceFromPossession = distance;
+        player.updateDistanceFromPossession( distance );
       }
     }
   }

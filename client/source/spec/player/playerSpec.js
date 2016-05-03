@@ -27,6 +27,11 @@ describe( "Player", function() {
     expect( player.posY ).toEqual( 100 );
   });
 
+  it( 'should be able to set distance from possession', function() {
+    player.updateDistanceFromPossession( 70 );
+    expect( player.distanceFromPossession ).toEqual( 70 );
+  });
+
   describe( 'when a player has a position', function() {
 
     beforeEach( function() {

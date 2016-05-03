@@ -14,6 +14,11 @@ var Player = function( options ) {
 
 var playerProto = {
 
+  updateDistanceFromPossession: function( distance ) {
+    this.distanceFromPossession = distance;
+    return this;
+  },
+
   setPos: function( x, y ) {
     this.posX = x;
     this.posY = y;
