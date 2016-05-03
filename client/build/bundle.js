@@ -48,47 +48,10 @@
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
+	var OpeningScreen = __webpack_require__(162);
 	var _ = __webpack_require__(159);
 	
 	window.onload = function () {
-	
-	  var OpeningScreen = React.createClass({
-	    displayName: 'OpeningScreen',
-	
-	
-	    render: function render() {
-	      return React.createElement(
-	        'section',
-	        { className: 'home-menu-wrapper' },
-	        React.createElement(
-	          'div',
-	          { className: 'home-menu' },
-	          React.createElement(
-	            'div',
-	            { className: 'home-menu-logo' },
-	            'Premier Manager'
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'panel' },
-	            React.createElement(
-	              'div',
-	              { className: 'panel-list-item' },
-	              'New game',
-	              React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'panel-list-item' },
-	              'Load game',
-	              React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
-	            )
-	          )
-	        )
-	      );
-	    }
-	
-	  });
 	
 	  ReactDOM.render(React.createElement(OpeningScreen, null), document.getElementById('app'));
 	};
@@ -35747,6 +35710,92 @@
 		return module;
 	}
 
+
+/***/ },
+/* 161 */,
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+	var NewGameBox = __webpack_require__(165);
+	
+	var OpeningScreen = React.createClass({
+	  displayName: 'OpeningScreen',
+	
+	
+	  newGame: function newGame() {
+	
+	    ReactDOM.render(React.createElement(NewGameBox, null), document.getElementById('app'));
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'section',
+	      { className: 'home-menu-wrapper' },
+	      React.createElement(
+	        'div',
+	        { className: 'home-menu' },
+	        React.createElement(
+	          'div',
+	          { className: 'home-menu-logo' },
+	          'Premier Manager'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'panel' },
+	          React.createElement(
+	            'div',
+	            { onClick: this.newGame, className: 'panel-list-item' },
+	            'New game',
+	            React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'panel-list-item' },
+	            'Load game',
+	            React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = OpeningScreen;
+
+/***/ },
+/* 163 */,
+/* 164 */,
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var NewGameBox = React.createClass({
+	  displayName: "NewGameBox",
+	
+	
+	  render: function render() {
+	    return React.createElement(
+	      "section",
+	      { className: "home-menu-wrapper" },
+	      React.createElement(
+	        "h1",
+	        null,
+	        "NewGameBox"
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewGameBox;
 
 /***/ }
 /******/ ]);

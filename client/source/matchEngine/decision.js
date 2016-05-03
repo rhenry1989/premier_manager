@@ -5,7 +5,12 @@ var Decision = function() {
 
 var decisionProto = {
 
-  make: function( players ) {
+  make: function( players, pitch ) {
+    var playerInPossession = this.findPlayerInPossession( players );
+    this.playerDistancesFromPossession( players, playerInPossession )
+    var distanceLPost = this.distanceFromLPost( playerInPossession );
+    var distanceRPost = this.distanceFromRPost( playerInPossession );
+
     return {
       goingTo: 'pass',
       from: this.findPlayerInPossession( players ),
@@ -37,12 +42,12 @@ var decisionProto = {
     return Math.sqrt( diffX*diffX + diffY*diffY );
   },
 
-  distanceFromPosts: function( playerInPossession ) {
-    var lPost = 48.71
-    var rPost = 41.29
-    var lPostDiff = Math.abs( playerInPossession.posY - lPost );
-    var diffX = playerInPossession.posX * playerInPossession.posX;
-    return Math.sqrt( diffX + lPostDiff*lPostDiff );
+  distanceFromLPost: function( playerInPossession ) {
+    return this.distanceCalculator( 0, 48.71, playerInPossession.posY, playerInPossession.posX )
+  },
+
+  distanceFromRPost: function( playerInPossession ) {
+    return this.distanceCalculator( 0, 41.29, playerInPossession.posY, playerInPossession.posX )
   },
 
   playerDistancesFromPossession: function( players, playerInPossession ) {

@@ -56,9 +56,14 @@ describe( 'Decision', function() {
         playerInPossession = decision.findPlayerInPossession( players );
       });
 
-      it( 'should calculate distance from left and right posts', function() {
-        var result = decision.distanceFromPosts( playerInPossession );
+      it( 'should calculate distance from left post', function() {
+        var result = decision.distanceFromLPost( playerInPossession );
         expect( result ).toEqual( 112.38622735904966 );
+      });
+
+      it( 'should calculate distance from right post', function() {
+        var result = decision.distanceFromRPost( playerInPossession );
+        expect( result ).toEqual( 115.96061443438458 );
       });
 
       describe( 'when a player makes a decision', function() {
@@ -77,6 +82,19 @@ describe( 'Decision', function() {
         it( 'should select what player to attempt to pass to', function() {
           var result = decision.selectPass( players );
           expect( result.name ).toEqual( 'Rick Henry' );
+        });
+
+        describe( 'when a player is in a shooting position', function() {
+
+          beforeEach( function() {
+            playerInPossession.setPos( 10, 50 );
+          });
+
+          it( 'should attempt to shoot if they are in a position to do so', function() {
+            var result = decision.make( players );
+            expect( result.goingTo ).toEqual( 'shoot' );
+          });
+
         });
 
       });
