@@ -31,16 +31,24 @@ var decisionProto = {
     }
   },
 
-  distanceFromPossession: function( player, playerInPossession ) {
-    var diffX = Math.abs( playerInPossession.posX - player.posX );
-    var diffY = Math.abs( playerInPossession.posY - player.posY );
+  distanceCalculator: function( posXA, posYA, posXB, posYB ) {
+    var diffX = Math.abs( posXA - posXB );
+    var diffY = Math.abs( posYA - posYB );
     return Math.sqrt( diffX*diffX + diffY*diffY );
   },
 
-  playerDistances: function( players, playerInPossession ) {
+  distanceFromPosts: function( playerInPossession ) {
+    var lPost = 48.71
+    var rPost = 41.29
+    var lPostDiff = Math.abs( playerInPossession.posY - lPost );
+    var diffX = playerInPossession.posX * playerInPossession.posX;
+    return Math.sqrt( diffX + lPostDiff*lPostDiff );
+  },
+
+  playerDistancesFromPossession: function( players, playerInPossession ) {
     for ( player of players ) {
       if ( player.possession === false ) {
-        var distance = this.distanceFromPossession( player, playerInPossession );
+        var distance = this.distanceCalculator( player.posX, player.posY, playerInPossession.posY, playerInPossession.posX );
         player.updateDistanceFromPossession( distance );
       }
     }

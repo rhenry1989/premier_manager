@@ -45,21 +45,26 @@ describe( 'Decision', function() {
       expect( result.name ).toEqual( 'Jon Henry' )
     });
 
+    it( 'should be able to calculate a distance', function() {
+      var result = decision.distanceCalculator( 0, 0, 100, 100);
+      expect( result ).toEqual( 141.4213562373095 );
+    });
+
     describe( 'when a player has possession', function() {
 
       beforeEach( function() {
         playerInPossession = decision.findPlayerInPossession( players );
-      })
+      });
 
-      it( 'should calculate distance from possession', function() {
-        var result = decision.distanceFromPossession( player1, playerInPossession );
-        expect( result ).toEqual( 70.71067811865476 );
+      it( 'should calculate distance from left and right posts', function() {
+        var result = decision.distanceFromPosts( playerInPossession );
+        expect( result ).toEqual( 112.38622735904966 );
       });
 
       describe( 'when a player makes a decision', function() {
 
         beforeEach( function() {
-          decision.playerDistances( players, playerInPossession );
+          decision.playerDistancesFromPossession( players, playerInPossession );
         });
 
         it( 'should select option when in possession', function() {
