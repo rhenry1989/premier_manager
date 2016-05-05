@@ -25,8 +25,17 @@ var NewGameSelectNation = React.createClass({
     return (
       <form className="inline-form __text-right" onSubmit={this.handleSubmit}>
         <div className="dropdown-w-icon __margin-r-sm">
-          <select className="dropdown" id="NewGameSelectNation" value={this.state.selectedIndex} onChange={this.handleChange}>
+          <select className="dropdown" value={this.state.selectedIndex} onChange={this.handleChange}>
             {options}
+          </select>
+          <div className="dropdown-icon">
+            <i className="fa fa-chevron-circle-down" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div className="dropdown-w-icon __margin-r-sm">
+          <select className="dropdown">
+            <option>Premier Division</option>
+            <option>First Division</option>
           </select>
           <div className="dropdown-icon">
             <i className="fa fa-chevron-circle-down" aria-hidden="true"></i>

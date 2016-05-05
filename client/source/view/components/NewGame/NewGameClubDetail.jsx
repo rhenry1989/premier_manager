@@ -10,6 +10,7 @@ var NewGameClubDetail = React.createClass({
     }
     return (
       <figure className="card">
+        Start your career at:
         <div className="card-img round-logo" style={logoStyle}></div>
         <figcaption>
           <div className="card-title">

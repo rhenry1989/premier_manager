@@ -59,16 +59,26 @@ html, body {
   letter-spacing: 1px;
 }
 
+#app {
+  height: 100%;
+}
+
 /* Menus */
 
 .home-menu {
 }
 
 .home-menu-wrapper {
+  display: -webkit-box;
+  display: -moz-box;       
+  display: -ms-flexbox;  
+  display: -webkit-flex;   
   display: flex;
   align-items: center;
+  -webkit-align-items: center;
   justify-content: center;
-  height: 100vh;
+  -webkit-justify-content: center;
+  height: 100%;
 }
 
 .home-menu-logo {
@@ -118,6 +128,10 @@ html, body {
   padding-right: 15px;
 }
 
+.panel-content {
+  height: calc(100% - 60px);
+}
+
 .panel-list {
 
 }
@@ -152,6 +166,7 @@ html, body {
 .card {
   position: relative;
   text-align: center;
+  padding: 15px;
 }
 
 .card-img {
@@ -187,21 +202,15 @@ html, body {
 
 .container-med {
   width: 66%;
-  height: 90vh;
-}
-
-.container-height-med {
-  height: 80vh;
-}
-
-.container-large {
-  width: 95%;
-  height: 90%;
+  margin: 0 auto;
 }
 
 .row-full-height {
-  height: 100vh;
-  background-color: white;
+  height: 100%;
+}
+
+.row-90-height {
+  height: 90%;
 }
 
 .row, 
@@ -335,6 +344,7 @@ html, body {
   min-height: 30px;
   border-radius: 15px;
   padding-left: 10px;
+  padding-right: 35px;
   outline: none;
   cursor: pointer;
 }
@@ -343,7 +353,7 @@ html, body {
   color: rgba(255,99,71, 1);
   display: inline-block;
   position: absolute;
-  right: 10px;
+  right: 6px;
   top: 5px;
 }
 

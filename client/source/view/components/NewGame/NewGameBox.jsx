@@ -48,9 +48,9 @@ var NewGameBox = React.createClass({
   render: function() {
     return (
       <section className="home-menu-wrapper">
-        <div className="panel container-med">
+        <div className="panel container-med row-90-height">
           <div className="panel-header __text-large">
-            <div className="__float-left">Select a team to manage</div>
+            <div className="__float-left">Select team to manage</div>
             <div className="__float-right">
               <NewGameSelectNation 
                 nations={this.state.nations} 
@@ -59,7 +59,7 @@ var NewGameBox = React.createClass({
               </NewGameSelectNation>
             </div>
           </div>
-          <div className="row container-height-med">
+          <div className="panel-content row">
             <div className="column column-6 __border-r scroll-y">
               <NewGameNationDetail 
                 nation={this.state.focusNation}
