@@ -10,6 +10,16 @@ var Pass = function() {
 
 var passProto = {
 
+  select: function( players ) {
+    var selected;
+    for ( player of players ) {
+      if ( player.possession === false  ) {
+        selected = player;
+      }
+    }
+    return selected;
+  },
+
   attempt: function( options ) {
     this.from = options.from;
     this.to = options.to;

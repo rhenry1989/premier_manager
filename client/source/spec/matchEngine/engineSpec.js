@@ -43,6 +43,12 @@ describe( 'Engine', function() {
       engine.addPlayer( player2 );      
     });
 
+    it( 'should find player in possession', function() {
+      var result = engine.findPlayerInPossession();
+      expect( result ).toBeTruthy();
+      expect( result.name ).toEqual( 'Jon Henry' )
+    });
+
     it ( 'should play a match', function() {
       engine.play();
     });

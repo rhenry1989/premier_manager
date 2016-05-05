@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+@import url(https://fonts.googleapis.com/css?family=Montserrat:100,400,700);
 
 /* Reset */
 
@@ -56,6 +56,7 @@ html, body {
   background-size: cover;
   font-family: 'Montserrat', sans-serif;
   height: 100%;
+  letter-spacing: 1px;
 }
 
 /* Menus */
@@ -106,6 +107,19 @@ html, body {
 .panel {
   display: block;
   background-color: #fff;
+  overflow: hidden;
+}
+
+.panel-header {
+  height: 60px;
+  line-height: 60px;
+  border-bottom: 1px solid rgba(255,99,71, 1);
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.panel-list {
+
 }
 
 .panel-list-item {
@@ -133,11 +147,56 @@ html, body {
   cursor: pointer;
 }
 
+/* Cards */
+
+.card {
+  position: relative;
+  text-align: center;
+}
+
+.card-img {
+  display: block;
+  margin: 20px auto;
+}
+
+.card-title {
+  margin-bottom: 10px;
+}
+
+.card-content {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 100;
+  text-align: left;
+  padding: 15px;
+}
+
+.round-logo {
+  border: 12px solid black;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+}
+
 /* Grid system */
 
 .container {
   width: 95%;
   margin: 0 auto;
+}
+
+.container-med {
+  width: 66%;
+  height: 90vh;
+}
+
+.container-height-med {
+  height: 80vh;
+}
+
+.container-large {
+  width: 95%;
+  height: 90%;
 }
 
 .row-full-height {
@@ -217,7 +276,106 @@ html, body {
     width: 100%;
 }
 
+/* Buttons */
+
+.button {
+  position: relative;
+  border-radius: 15px;
+  height: 30px;
+  padding-left: 10px;
+  outline: none;
+}
+
+.button-w-icon {
+  padding-right: 34px;
+}
+
+.button i {
+  position: absolute;
+  font-size: 24px;
+  right: 5px;
+  top: 2px;
+}
+
+.button-simple {
+  color: #ffffff;
+  background-color: #3498db;
+  border: 1px solid #2D83BD;
+}
+
+.button-simple:hover {
+  color: #3498db;
+  background-color: transparent;
+  border: 1px solid #3498db;
+}
+
+.button:hover, 
+.button:active {
+  cursor: pointer;
+}
+
+/* Forms & Inputs */
+
+.inline-form {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-w-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown {
+  position: relative;
+  z-index: 1;
+  background-color: transparent;
+  -webkit-appearance: none;
+  min-width: 100px;
+  min-height: 30px;
+  border-radius: 15px;
+  padding-left: 10px;
+  outline: none;
+  cursor: pointer;
+}
+
+.dropdown-icon {
+  color: rgba(255,99,71, 1);
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+}
+
 /* Helpers */
+
+small {
+  font-size: 0.8rem;
+}
+
+.__text-right {
+  text-align: right;
+}
+
+.__text-left {
+  text-align: left;
+}
+
+.__text-large {
+  font-size: 24px;
+}
+
+.__text-grey {
+  color: #b1b1b1;
+}
+
+.__margin-r-sm {
+  margin-right: 6px;
+}
+
+.__margin-l-sm {
+  margin-left: 6px;
+}
 
 .__float-right {
   float: right;
@@ -225,4 +383,17 @@ html, body {
 
 .__float-left {
   float: left;
+}
+
+.__border-l {
+  border-left: 1px solid #e5e5e5;
+}
+
+.__border-r {
+  border-right: 1px solid #e5e5e5;
+}
+
+.scroll-y {
+  height: 100%;
+  overflow-y: scroll;
 }

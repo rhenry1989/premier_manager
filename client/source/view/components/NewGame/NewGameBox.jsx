@@ -1,11 +1,78 @@
 var React = require( 'react' );
+var ReactDOM = require( 'react-dom' );
+var NewGameSelectNation = require( './NewGameSelectNation' );
+var NewGameNationDetail = require( './NewGameNationDetail' );
+var NewGameClubDetail = require( './NewGameClubDetail' );
+var ClubDashboard = require( '../Club/ClubDashboard' );
 
 var NewGameBox = React.createClass({
+
+  getInitialState: function() {
+    return { nations:[], focusNation:null, focusClub:null }
+  },
+
+  componentDidMount: function() {
+    var url = "http://localhost:3000/nations";
+    var request = new XMLHttpRequest();
+    request.open("GET", url);
+    request.onload = function(){
+      if(request.status === 200){
+        var data = JSON.parse(request.responseText);
+        this.setState({ 
+          nations: data, 
+          focusNation: data[0], 
+          focusClub: data[0].clubs[0] 
+        });
+      }
+    }.bind(this)
+    request.send(null);
+  },
+
+  startNewGame: function() {
+
+    ReactDOM.render(
+      <ClubDashboard />,
+      document.getElementById( 'app' )
+    )
+
+  },
+
+  setFocusNation: function(nation) {
+    this.setState({ focusNation: nation })
+  },
+
+  setFocusClub: function(club) {
+    this.setState({ focusClub: club })
+  },
 
   render: function() {
     return (
       <section className="home-menu-wrapper">
-        <h1>NewGameBox</h1>
+        <div className="panel container-med">
+          <div className="panel-header __text-large">
+            <div className="__float-left">Select a team to manage</div>
+            <div className="__float-right">
+              <NewGameSelectNation 
+                nations={this.state.nations} 
+                selectNation={this.setFocusNation}
+                startGame={this.startNewGame}>
+              </NewGameSelectNation>
+            </div>
+          </div>
+          <div className="row container-height-med">
+            <div className="column column-6 __border-r scroll-y">
+              <NewGameNationDetail 
+                nation={this.state.focusNation}
+                selectClub={this.setFocusClub}>
+              </NewGameNationDetail>
+            </div>
+            <div className="column column-6">
+              <NewGameClubDetail 
+                club={this.state.focusClub}>
+              </NewGameClubDetail>
+            </div>
+          </div>
+        </div>
       </section>
     )
   }

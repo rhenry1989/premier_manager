@@ -16,13 +16,19 @@ var engineProto = {
   play: function() {
     var i = 0;
     while ( i < 10 ) {
-      var decision = this.decision.make( this.players, this.pitch );
-      console.log( 'players has decided to', decision.goingTo );
+      var decision = this.decision.make( this.findPlayerInPossession(), this.players, this.pitch );
       if ( decision.goingTo === 'pass' ) {
-        console.log( 'opted to pass from ' + decision.from.name + ' to ' +  decision.to.name )
         this.makePass( decision );
       }
       i++
+    }
+  },
+
+  findPlayerInPossession: function() {
+    for ( player of this.players ) {
+      if ( player.possession === true ) { 
+        return player; 
+      }
     }
   },
 

@@ -48,8 +48,8 @@
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
-	var OpeningScreen = __webpack_require__(162);
-	var _ = __webpack_require__(159);
+	var OpeningScreen = __webpack_require__(159);
+	var _ = __webpack_require__(161);
 	
 	window.onload = function () {
 	
@@ -19665,6 +19665,161 @@
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+	var NewGameBox = __webpack_require__(160);
+	
+	var OpeningScreen = React.createClass({
+	  displayName: 'OpeningScreen',
+	
+	
+	  newGame: function newGame() {
+	
+	    ReactDOM.render(React.createElement(NewGameBox, null), document.getElementById('app'));
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'section',
+	      { className: 'home-menu-wrapper' },
+	      React.createElement(
+	        'div',
+	        { className: 'home-menu' },
+	        React.createElement(
+	          'div',
+	          { className: 'home-menu-logo' },
+	          'Premier Manager'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'panel' },
+	          React.createElement(
+	            'div',
+	            { onClick: this.newGame, className: 'panel-list-item' },
+	            'New game',
+	            React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'panel-list-item' },
+	            'Load game',
+	            React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = OpeningScreen;
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+	var NewGameSelectNation = __webpack_require__(163);
+	var NewGameNationDetail = __webpack_require__(164);
+	var NewGameClubDetail = __webpack_require__(165);
+	var ClubDashboard = __webpack_require__(166);
+	
+	var NewGameBox = React.createClass({
+	  displayName: 'NewGameBox',
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { nations: [], focusNation: null, focusClub: null };
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    var url = "http://localhost:3000/nations";
+	    var request = new XMLHttpRequest();
+	    request.open("GET", url);
+	    request.onload = function () {
+	      if (request.status === 200) {
+	        var data = JSON.parse(request.responseText);
+	        this.setState({
+	          nations: data,
+	          focusNation: data[0],
+	          focusClub: data[0].clubs[0]
+	        });
+	      }
+	    }.bind(this);
+	    request.send(null);
+	  },
+	
+	  startNewGame: function startNewGame() {
+	
+	    ReactDOM.render(React.createElement(ClubDashboard, null), document.getElementById('app'));
+	  },
+	
+	  setFocusNation: function setFocusNation(nation) {
+	    this.setState({ focusNation: nation });
+	  },
+	
+	  setFocusClub: function setFocusClub(club) {
+	    this.setState({ focusClub: club });
+	  },
+	
+	  render: function render() {
+	    return React.createElement(
+	      'section',
+	      { className: 'home-menu-wrapper' },
+	      React.createElement(
+	        'div',
+	        { className: 'panel container-med' },
+	        React.createElement(
+	          'div',
+	          { className: 'panel-header __text-large' },
+	          React.createElement(
+	            'div',
+	            { className: '__float-left' },
+	            'Select a team to manage'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: '__float-right' },
+	            React.createElement(NewGameSelectNation, {
+	              nations: this.state.nations,
+	              selectNation: this.setFocusNation,
+	              startGame: this.startNewGame })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'row container-height-med' },
+	          React.createElement(
+	            'div',
+	            { className: 'column column-6 __border-r scroll-y' },
+	            React.createElement(NewGameNationDetail, {
+	              nation: this.state.focusNation,
+	              selectClub: this.setFocusClub })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'column column-6' },
+	            React.createElement(NewGameClubDetail, {
+	              club: this.state.focusClub })
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewGameBox;
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
 	 * @license
 	 * lodash 4.11.1 (Custom Build) <https://lodash.com/>
@@ -35693,10 +35848,10 @@
 	  }
 	}.call(this));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(160)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(162)(module), (function() { return this; }())))
 
 /***/ },
-/* 160 */
+/* 162 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -35712,73 +35867,195 @@
 
 
 /***/ },
-/* 161 */,
-/* 162 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(158);
-	var NewGameBox = __webpack_require__(165);
 	
-	var OpeningScreen = React.createClass({
-	  displayName: 'OpeningScreen',
+	var NewGameSelectNation = React.createClass({
+	  displayName: 'NewGameSelectNation',
 	
 	
-	  newGame: function newGame() {
+	  getInitialState: function getInitialState() {
+	    return { selectedIndex: this.props.nations[0] };
+	  },
 	
-	    ReactDOM.render(React.createElement(NewGameBox, null), document.getElementById('app'));
+	  handleChange: function handleChange(e) {
+	    var newIndex = e.target.value;
+	    this.setState({ selectedIndex: newIndex });
+	    this.props.selectNation(this.props.nations[newIndex]);
+	  },
+	
+	  handleSubmit: function handleSubmit(e) {
+	    e.preventDefault();
+	    console.log('submitted');
+	    this.props.startGame();
 	  },
 	
 	  render: function render() {
+	    var options = this.props.nations.map(function (nation, index) {
+	      return React.createElement(
+	        'option',
+	        { value: index, key: index },
+	        nation.name
+	      );
+	    });
 	    return React.createElement(
-	      'section',
-	      { className: 'home-menu-wrapper' },
+	      'form',
+	      { className: 'inline-form __text-right', onSubmit: this.handleSubmit },
 	      React.createElement(
 	        'div',
-	        { className: 'home-menu' },
+	        { className: 'dropdown-w-icon __margin-r-sm' },
 	        React.createElement(
-	          'div',
-	          { className: 'home-menu-logo' },
-	          'Premier Manager'
+	          'select',
+	          { className: 'dropdown', id: 'NewGameSelectNation', value: this.state.selectedIndex, onChange: this.handleChange },
+	          options
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'panel' },
-	          React.createElement(
-	            'div',
-	            { onClick: this.newGame, className: 'panel-list-item' },
-	            'New game',
-	            React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'panel-list-item' },
-	            'Load game',
-	            React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
-	          )
+	          { className: 'dropdown-icon' },
+	          React.createElement('i', { className: 'fa fa-chevron-circle-down', 'aria-hidden': 'true' })
 	        )
+	      ),
+	      React.createElement(
+	        'button',
+	        { type: 'submit', className: 'button button-simple button-w-icon' },
+	        'Start Game',
+	        React.createElement('i', { className: 'fa fa-chevron-circle-right', 'aria-hidden': 'true' })
 	      )
 	    );
 	  }
 	
 	});
 	
-	module.exports = OpeningScreen;
+	module.exports = NewGameSelectNation;
 
 /***/ },
-/* 163 */,
-/* 164 */,
-/* 165 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	var React = __webpack_require__(1);
 	
-	var NewGameBox = React.createClass({
-	  displayName: "NewGameBox",
+	var NewGameNationDetail = React.createClass({
+	  displayName: "NewGameNationDetail",
+	
+	
+	  getInitialState: function getInitialState() {
+	    return { selectedIndex: null };
+	  },
+	
+	  handleClick: function handleClick(e) {
+	    var newIndex = e.target.value;
+	    this.setState({ selectedIndex: newIndex });
+	    this.props.selectClub(this.props.nation.clubs[newIndex]);
+	  },
+	
+	  render: function render() {
+	    if (!this.props.nation) {
+	      return React.createElement(
+	        "h4",
+	        null,
+	        " No Country Selected "
+	      );
+	    }
+	    var clubs = this.props.nation.clubs.map(function (club, index) {
+	      return React.createElement(
+	        "li",
+	        { className: "panel-list-item", key: index, value: index, onClick: this.handleClick },
+	        club.name
+	      );
+	    }.bind(this));
+	    return React.createElement(
+	      "ul",
+	      { className: "panel-list" },
+	      clubs
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewGameNationDetail;
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var NewGameClubDetail = React.createClass({
+	  displayName: 'NewGameClubDetail',
+	
+	
+	  render: function render() {
+	    var club = this.props.club;
+	    if (!club) {
+	      return React.createElement(
+	        'h4',
+	        null,
+	        ' No Club Selected '
+	      );
+	    }
+	    var logoStyle = {
+	      background: 'linear-gradient( -45deg, ' + club.col_2 + ' 0%, ' + club.col_2 + ' 50%, ' + club.col_1 + ' 50%, ' + club.col_1 + ' 100% )'
+	    };
+	    return React.createElement(
+	      'figure',
+	      { className: 'card' },
+	      React.createElement('div', { className: 'card-img round-logo', style: logoStyle }),
+	      React.createElement(
+	        'figcaption',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'card-title' },
+	          React.createElement(
+	            'div',
+	            null,
+	            club.name,
+	            ' Football Club'
+	          ),
+	          React.createElement(
+	            'small',
+	            { className: '__text-grey' },
+	            'founded:'
+	          ),
+	          ' ',
+	          club.founded
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'card-content' },
+	          React.createElement(
+	            'div',
+	            { className: '__text-grey' },
+	            club.description
+	          )
+	        ),
+	        React.createElement('div', { className: 'card-footer' })
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewGameClubDetail;
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var ClubDashboard = React.createClass({
+	  displayName: "ClubDashboard",
 	
 	
 	  render: function render() {
@@ -35786,16 +36063,16 @@
 	      "section",
 	      { className: "home-menu-wrapper" },
 	      React.createElement(
-	        "h1",
-	        null,
-	        "NewGameBox"
+	        "div",
+	        { className: "panel container-large" },
+	        "dfkjsdk"
 	      )
 	    );
 	  }
 	
 	});
 	
-	module.exports = NewGameBox;
+	module.exports = ClubDashboard;
 
 /***/ }
 /******/ ]);

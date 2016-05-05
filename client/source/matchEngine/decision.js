@@ -1,38 +1,28 @@
 var Decision = function() {
   var decision = Object.create( decisionProto );
   return decision;
-}
+};
 
 var decisionProto = {
 
-  make: function( players, pitch ) {
-    var playerInPossession = this.findPlayerInPossession( players );
-    this.playerDistancesFromPossession( players, playerInPossession )
+  make: function( playerInPossession, players, pitch ) {
+    this.playerDistancesFromPossession( players, playerInPossession );
     var distanceLPost = this.distanceFromLPost( playerInPossession );
     var distanceRPost = this.distanceFromRPost( playerInPossession );
 
-    return {
-      goingTo: 'pass',
-      from: this.findPlayerInPossession( players ),
-      to: this.selectPass( players )
-    };
-  },
-
-  selectPass: function( players ) {
-    var selected = players[0]
-    for ( player of players ) {
-      if ( player.possession === false  ) {
-        selected = player;
-      }
+    if ( this.shootingOpportunity( playerInPossession ) ) {
+      return 'shoot'
     }
-    return selected;
+    return 'pass'
   },
 
-  findPlayerInPossession: function( players ) {
-    for ( player of players ) {
-      if ( player.possession === true ) { 
-        return player; 
-      }
+  shootingOpportunity: function( playerInPossession ) {
+    var distanceX = ( playerInPossession.technical.shooting / 2 );
+    if ( playerInPossession.posX > distanceX ) {
+      return false;
+    }
+    if ( playerInPossession.posY > 10 && playerInPossession.posY < 80 ) {
+      return true;
     }
   },
 

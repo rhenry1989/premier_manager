@@ -27,7 +27,8 @@ describe( 'Decision', function() {
       var options2 = {
         name: 'Jon Henry',
         technical: {
-          passing: 10
+          passing: 10,
+          shooting: 50
         },
         brain: {
           decisions: 43
@@ -39,12 +40,6 @@ describe( 'Decision', function() {
       players = [ player1, player2 ];
     });
 
-    it( 'should find player in possession', function() {
-      var result = decision.findPlayerInPossession( players );
-      expect( result ).toBeTruthy();
-      expect( result.name ).toEqual( 'Jon Henry' )
-    });
-
     it( 'should be able to calculate a distance', function() {
       var result = decision.distanceCalculator( 0, 0, 100, 100);
       expect( result ).toEqual( 141.4213562373095 );
@@ -53,7 +48,7 @@ describe( 'Decision', function() {
     describe( 'when a player has possession', function() {
 
       beforeEach( function() {
-        playerInPossession = decision.findPlayerInPossession( players );
+        playerInPossession = players[1];
       });
 
       it( 'should calculate distance from left post', function() {
@@ -73,15 +68,13 @@ describe( 'Decision', function() {
         });
 
         it( 'should select option when in possession', function() {
-          var result = decision.make( players );
-          expect( result.goingTo ).toEqual( 'pass' );
-          expect( result.from.name ).toEqual( 'Jon Henry' );
-          expect( result.to.name ).toEqual( 'Rick Henry' );
+          var result = decision.make( players[1], players );
+          expect( result ).toEqual( 'pass' );
         });
 
-        it( 'should select what player to attempt to pass to', function() {
-          var result = decision.selectPass( players );
-          expect( result.name ).toEqual( 'Rick Henry' );
+        it( 'should return false when player not in a shooting position', function() {
+          var result = decision.shootingOpportunity( playerInPossession )
+          expect( result ).toEqual( false );
         });
 
         describe( 'when a player is in a shooting position', function() {
@@ -90,9 +83,9 @@ describe( 'Decision', function() {
             playerInPossession.setPos( 10, 50 );
           });
 
-          it( 'should attempt to shoot if they are in a position to do so', function() {
-            var result = decision.make( players );
-            expect( result.goingTo ).toEqual( 'shoot' );
+          it( 'should return true if in shooting bounds', function() {
+            var result = decision.shootingOpportunity( playerInPossession );
+            expect( result ).toEqual( true );
           });
 
         });
