@@ -5,7 +5,8 @@ var NewGameSelectNation = require( './NewGameSelectNation' );
 var NewGameSelectLeague = require( './NewGameSelectLeague' );
 var NewGameNationDetail = require( './NewGameNationDetail' );
 var NewGameClubDetail = require( './NewGameClubDetail' );
-var ClubDashboard = require( '../Club/ClubDashboard' );
+var NewGameSubmit = require( './NewGameSubmit' );
+// var NewManagerBox = require( '../Club/NewManagerBox' );
 
 var NewGameBox = React.createClass({
 
@@ -36,9 +37,11 @@ var NewGameBox = React.createClass({
     request.send(null);
   },
 
-  startNewGame: function() {
+  startNewGame: function(e) {
+    e.preventDefault();
+    console.log( 'woooooohooooooo' )
     ReactDOM.render(
-      <ClubDashboard />,
+      <NewManagerBox />,
       document.getElementById( 'app' )
     )
   },
@@ -69,19 +72,17 @@ var NewGameBox = React.createClass({
           <div className="panel-header __text-large">
             <div className="__float-left">Select team to manage</div>
             <div className="__float-right">
-              <NewGameSelectNation 
-                nations={this.state.nations} 
-                selectNation={this.setFocusNation}
-                startGame={this.startNewGame}>
-              </NewGameSelectNation>
-              <NewGameSelectLeague
-                nation={this.state.focusNation}
-                selectLeague={this.setFocusLeague}> 
-              </NewGameSelectLeague>
-              <button type="submit" className="button button-simple button-w-icon">
-                Start Game
-                <i className="fa fa-chevron-circle-right" aria-hidden="true"></i>
-              </button>
+              <form className="inline-form __text-right" onSubmit={this.startNewGame}>
+                <NewGameSelectNation 
+                  nations={this.state.nations} 
+                  selectNation={this.setFocusNation}>
+                </NewGameSelectNation>
+                <NewGameSelectLeague
+                  nation={this.state.focusNation}
+                  selectLeague={this.setFocusLeague}> 
+                </NewGameSelectLeague>
+                <NewGameSubmit />
+              </form>
             </div>
           </div>
           <div className="panel-content row">
