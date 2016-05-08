@@ -5,17 +5,15 @@ var NewGameContainer = require( './NewGame/NewGameContainer.jsx' );
 var OpeningScreen = React.createClass({
 
   newGame: function() {
-
     ReactDOM.render(
       <NewGameContainer />,
       document.getElementById( 'app' )
     )
-
   },
 
   render: function() {
     return (
-      <section className="__vertical-center-align">
+      <section className="home-menu-wrapper">
         <div className="home-menu">
           <div className="home-menu-logo">
             Premier Manager

@@ -19676,14 +19676,13 @@
 	
 	
 	  newGame: function newGame() {
-	
 	    ReactDOM.render(React.createElement(NewGameContainer, null), document.getElementById('app'));
 	  },
 	
 	  render: function render() {
 	    return React.createElement(
 	      'section',
-	      { className: '__vertical-center-align' },
+	      { className: 'home-menu-wrapper' },
 	      React.createElement(
 	        'div',
 	        { className: 'home-menu' },
@@ -19723,7 +19722,6 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(158);
 	var _ = __webpack_require__(161);
 	var NewGameBox = __webpack_require__(163);
 	
@@ -35822,8 +35820,10 @@
 	'use strict';
 	
 	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
 	var NewGameSelect = __webpack_require__(164);
 	var NewGameLeagueDetails = __webpack_require__(165);
+	var NewManagerContainer = __webpack_require__(174);
 	
 	var NewGameBox = React.createClass({
 	  displayName: 'NewGameBox',
@@ -35837,9 +35837,9 @@
 	    };
 	  },
 	
-	  startNewGame: function startNewGame(e) {
-	    e.preventDefault();
-	    ReactDOM.render(React.createElement(NewManagerBox, {
+	  startGame: function startGame() {
+	    // POST request to server to create game - dealt with by container
+	    ReactDOM.render(React.createElement(NewManagerContainer, {
 	      selectedClub: this.state.focusClub }), document.getElementById('app'));
 	  },
 	
@@ -35872,7 +35872,7 @@
 	    }
 	    return React.createElement(
 	      'section',
-	      { className: '__vertical-align' },
+	      { className: 'home-menu-wrapper' },
 	      React.createElement(
 	        'div',
 	        { className: 'panel container-med row-90-height' },
@@ -35880,7 +35880,8 @@
 	          nations: this.props.nations,
 	          focusNation: this.state.focusNation,
 	          selectNation: this.setFocusNation,
-	          selectLeague: this.setFocusLeague }),
+	          selectLeague: this.setFocusLeague,
+	          startGame: this.startGame }),
 	        React.createElement(NewGameLeagueDetails, {
 	          focusLeague: this.state.focusLeague,
 	          focusClub: this.state.focusClub,
@@ -35908,6 +35909,11 @@
 	  displayName: 'NewGameSelect',
 	
 	
+	  onFormSubmit: function onFormSubmit(e) {
+	    e.preventDefault();
+	    this.props.startGame();
+	  },
+	
 	  render: function render() {
 	    return React.createElement(
 	      'div',
@@ -35922,7 +35928,7 @@
 	        { className: '__float-right' },
 	        React.createElement(
 	          'form',
-	          { className: 'inline-form __text-right', onSubmit: this.startNewGame },
+	          { className: 'inline-form __text-right', onSubmit: this.onFormSubmit },
 	          React.createElement(NewGameSelectNation, {
 	            nations: this.props.nations,
 	            selectNation: this.props.selectNation }),
@@ -35966,7 +35972,7 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'column column-6' },
+	        { className: 'column column-6 __vertical-center-align' },
 	        React.createElement(NewGameClubDetail, { club: this.props.focusClub })
 	      )
 	    );
@@ -36004,7 +36010,11 @@
 	    return React.createElement(
 	      'figure',
 	      { className: 'card' },
-	      'Start your career at:',
+	      React.createElement(
+	        'h5',
+	        null,
+	        'Start your career at:'
+	      ),
 	      React.createElement('div', { className: 'card-img round-logo', style: logoStyle }),
 	      React.createElement(
 	        'figcaption',
@@ -36013,18 +36023,21 @@
 	          'div',
 	          { className: 'card-title' },
 	          React.createElement(
-	            'div',
+	            'h3',
 	            null,
 	            club.name,
 	            ' Football Club'
 	          ),
 	          React.createElement(
 	            'small',
-	            { className: '__text-grey' },
-	            'founded:'
-	          ),
-	          ' ',
-	          club.founded
+	            null,
+	            React.createElement(
+	              'span',
+	              { className: '__text-grey' },
+	              'Founded: '
+	            ),
+	            club.founded
+	          )
 	        ),
 	        React.createElement(
 	          'div',
@@ -36223,6 +36236,208 @@
 	});
 	
 	module.exports = NewGameLeagueClubs;
+
+/***/ },
+/* 173 */,
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NewManagerSubmit = __webpack_require__(175);
+	var NewManagerDetails = __webpack_require__(176);
+	
+	var NewManagerContainer = React.createClass({
+	  displayName: 'NewManagerContainer',
+	
+	
+	  render: function render() {
+	    return React.createElement(
+	      'section',
+	      { className: 'home-menu-wrapper' },
+	      React.createElement(
+	        'div',
+	        { className: 'panel container-med row-90-height' },
+	        React.createElement(NewManagerSubmit, null),
+	        React.createElement(NewManagerDetails, { club: this.props.selectedClub })
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewManagerContainer;
+
+/***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var NewManagerSubmit = React.createClass({
+	  displayName: "NewManagerSubmit",
+	
+	
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      { className: "panel-header __text-large" },
+	      React.createElement(
+	        "div",
+	        { className: "__float-left" },
+	        "Manager Details"
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "__float-right" },
+	        React.createElement(
+	          "form",
+	          { className: "inline-form __text-right", onSubmit: this.beginGame },
+	          React.createElement(
+	            "button",
+	            { type: "submit", className: "button button-simple button-w-icon" },
+	            "Continue",
+	            React.createElement("i", { className: "fa fa-chevron-circle-right", "aria-hidden": "true" })
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewManagerSubmit;
+
+/***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var NewManagerClub = __webpack_require__(177);
+	var NewManagerPersonal = __webpack_require__(178);
+	
+	var NewManagerDetails = React.createClass({
+	  displayName: 'NewManagerDetails',
+	
+	
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'panel-content row' },
+	      React.createElement(
+	        'div',
+	        { className: 'column column-6 __border-r scroll-y __vertical-center-align' },
+	        React.createElement(NewManagerClub, { club: this.props.club })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'column column-6 __vertical-center-align' },
+	        React.createElement(NewManagerPersonal, null)
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewManagerDetails;
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	
+	var NewManagerClub = React.createClass({
+	  displayName: 'NewManagerClub',
+	
+	
+	  render: function render() {
+	    var club = this.props.club;
+	    var logoStyle = {
+	      background: 'linear-gradient( -45deg, ' + club.col_2 + ' 0%, ' + club.col_2 + ' 50%, ' + club.col_1 + ' 50%, ' + club.col_1 + ' 100% )'
+	    };
+	    return React.createElement(
+	      'figure',
+	      { className: 'card' },
+	      React.createElement('div', { className: 'card-img round-logo', style: logoStyle }),
+	      React.createElement(
+	        'figcaption',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'card-title' },
+	          React.createElement(
+	            'small',
+	            { className: '__text-grey' },
+	            'You have been appointed manager of:'
+	          ),
+	          React.createElement(
+	            'h4',
+	            null,
+	            club.name,
+	            ' Football Club'
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewManagerClub;
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var NewManagerPersonal = React.createClass({
+	  displayName: "NewManagerPersonal",
+	
+	
+	  render: function render() {
+	    return React.createElement(
+	      "form",
+	      { className: "basic-form" },
+	      React.createElement(
+	        "h3",
+	        null,
+	        "A few details..."
+	      ),
+	      React.createElement(
+	        "label",
+	        { className: "__text-grey", htmlFor: "first_name" },
+	        "First Name:"
+	      ),
+	      React.createElement("input", { className: "basic-form-input", type: "text", name: "first_name" }),
+	      React.createElement(
+	        "label",
+	        { className: "__text-grey", htmlFor: "second_name" },
+	        "Second Name:"
+	      ),
+	      React.createElement("input", { className: "basic-form-input", type: "text", name: "second_name" }),
+	      React.createElement(
+	        "label",
+	        { className: "__text-grey", htmlFor: "date_of_birth" },
+	        "Date of birth:"
+	      ),
+	      React.createElement("input", { className: "basic-form-input", type: "date", name: "date_of_birth" })
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewManagerPersonal;
 
 /***/ }
 /******/ ]);

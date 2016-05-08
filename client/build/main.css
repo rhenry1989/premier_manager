@@ -46,7 +46,7 @@ table {
   border-spacing: 0;
 }
 
-/* Body */
+/* Body & Globals */
 
 html, body { 
   background: url(img/cover.jpg) no-repeat center center fixed; 
@@ -59,6 +59,16 @@ html, body {
   letter-spacing: 1px;
 }
 
+h1, h2, h3 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+h4, h5, h6 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 #app {
   height: 100%;
 }
@@ -66,6 +76,19 @@ html, body {
 /* Menus */
 
 .home-menu {
+}
+
+.home-menu-wrapper {
+  display: -webkit-box;
+  display: -moz-box;       
+  display: -ms-flexbox;  
+  display: -webkit-flex;   
+  display: flex;
+  align-items: center;
+  -webkit-align-items: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  height: 100%;
 }
 
 .home-menu-logo {
@@ -119,8 +142,9 @@ html, body {
   height: calc(100% - 60px);
 }
 
-.panel-list {
-
+.column > .panel-list {
+  margin-right: -15px;
+  margin-left: -15px;
 }
 
 .panel-list-item {
@@ -218,6 +242,8 @@ html, body {
 .column {
   position: relative;
   float: left;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .column-1 {
@@ -308,6 +334,31 @@ html, body {
 
 /* Forms & Inputs */
 
+.basic-form {
+
+}
+
+.basic-form label {
+  display: block;
+  font-size: 12px;
+}
+
+.basic-form-input {
+  border: none;
+  border-bottom: 2px solid #b1b1b1;
+  display: block;
+  width: 100%;
+  height: 30px;
+  font-size: 20px;
+  outline: none;
+  margin-bottom: 30px;
+}
+
+.basic-form-input:focus,
+.basic-form-input:active {
+  border-bottom: 2px solid #3498db;
+}
+
 .inline-form {
   position: relative;
   display: inline-block;
@@ -354,7 +405,7 @@ small {
   text-align: left;
 }
 
-.text-center {
+.__text-center {
   text-align: center;
 }
 

@@ -1,6 +1,8 @@
 var React = require( 'react' );
+var ReactDOM = require( 'react-dom' );
 var NewGameSelect = require( './NewGameSelect' );
 var NewGameLeagueDetails = require( './NewGameLeagueDetails' );
+var NewManagerContainer = require( '../NewManager/NewManagerContainer' )
 
 var NewGameBox = React.createClass({
 
@@ -12,12 +14,12 @@ var NewGameBox = React.createClass({
     };
   },
 
-  startNewGame: function(e) {
-    e.preventDefault();
+  startGame: function() {
+    // POST request to server to create game - dealt with by container
     ReactDOM.render(
-      <NewManagerBox 
+      <NewManagerContainer 
         selectedClub={this.state.focusClub}>
-      </NewManagerBox>,
+      </NewManagerContainer>,
       document.getElementById( 'app' )
     )
   },
@@ -44,13 +46,14 @@ var NewGameBox = React.createClass({
   render: function() {
     if ( !this.props.nations ) { return( <h4>Waiting for data</h4> ) }
     return(
-      <section className="__vertical-align">
+      <section className="home-menu-wrapper">
         <div className="panel container-med row-90-height">
           <NewGameSelect 
             nations={this.props.nations} 
             focusNation={this.state.focusNation}
             selectNation={this.setFocusNation}
-            selectLeague={this.setFocusLeague}>
+            selectLeague={this.setFocusLeague}
+            startGame={this.startGame}>
           </NewGameSelect>
           <NewGameLeagueDetails 
             focusLeague={this.state.focusLeague}

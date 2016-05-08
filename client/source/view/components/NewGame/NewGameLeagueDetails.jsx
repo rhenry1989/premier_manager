@@ -13,7 +13,7 @@ var NewGameLeagueDetails = React.createClass({
             selectClub={this.props.selectClub}>
           </NewGameLeagueClubs>
         </div>
-        <div className="column column-6">
+        <div className="column column-6 __vertical-center-align">
           <NewGameClubDetail club={this.props.focusClub} />
         </div>
       </div>
