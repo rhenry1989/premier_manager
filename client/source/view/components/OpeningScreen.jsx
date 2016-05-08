@@ -1,13 +1,13 @@
 var React = require( 'react' );
 var ReactDOM = require( 'react-dom' );
-var NewGameBox = require( './NewGame/NewGameBox.jsx' );
+var NewGameContainer = require( './NewGame/NewGameContainer.jsx' );
 
 var OpeningScreen = React.createClass({
 
   newGame: function() {
 
     ReactDOM.render(
-      <NewGameBox />,
+      <NewGameContainer />,
       document.getElementById( 'app' )
     )
 
@@ -15,7 +15,7 @@ var OpeningScreen = React.createClass({
 
   render: function() {
     return (
-      <section className="home-menu-wrapper">
+      <section className="__vertical-center-align">
         <div className="home-menu">
           <div className="home-menu-logo">
             Premier Manager

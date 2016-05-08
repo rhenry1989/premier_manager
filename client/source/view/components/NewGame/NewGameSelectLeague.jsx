@@ -4,13 +4,13 @@ var NewGameSelectLeague = React.createClass({
 
   onLeagueChange: function(e) {
     var newIndex = e.target.value;
-    this.props.selectLeague( this.props.nation.leagues[newIndex] );
+    this.props.selectLeague( this.props.leagues[newIndex] );
   },
 
   render: function() {
-    if ( !this.props.nation ){ return( <h4>waiting for data</h4> ) }
+    if ( !this.props.leagues ){ return( <h4>waiting for data</h4> ) }
 
-    var leagues = this.props.nation.leagues.map( function(league, index) {
+    var leagues = this.props.leagues.map( function(league, index) {
       return( <option key={index} value={index}>{league.name}</option> )
     });
 

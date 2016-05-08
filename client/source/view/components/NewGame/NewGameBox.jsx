@@ -1,47 +1,23 @@
 var React = require( 'react' );
-var ReactDOM = require( 'react-dom' );
-var _ = require( 'lodash' );
-var NewGameSelectNation = require( './NewGameSelectNation' );
-var NewGameSelectLeague = require( './NewGameSelectLeague' );
-var NewGameNationDetail = require( './NewGameNationDetail' );
-var NewGameClubDetail = require( './NewGameClubDetail' );
-var NewGameSubmit = require( './NewGameSubmit' );
-// var NewManagerBox = require( '../Club/NewManagerBox' );
+var NewGameSelect = require( './NewGameSelect' );
+var NewGameLeagueDetails = require( './NewGameLeagueDetails' );
 
 var NewGameBox = React.createClass({
 
   getInitialState: function() {
     return { 
-      nations:[], 
-      focusNation:null, 
-      focusLeague:null,
-      focusClub:null
-    }
-  },
-
-  componentDidMount: function() {
-    var url = "http://localhost:3000/nations?leagues=true&clubs=true";
-    var request = new XMLHttpRequest();
-    request.open("GET", url);
-    request.onload = function(){
-      if(request.status === 200){
-        var nations = JSON.parse(request.responseText);
-        this.setState({ 
-          nations: nations, 
-          focusNation: nations[0],
-          focusLeague: nations[0].leagues[0],
-          focusClub: nations[0].leagues[0].clubs[0] 
-        });
-      }
-    }.bind(this)
-    request.send(null);
+      focusNation: this.props.nations[0],
+      focusLeague: this.props.nations[0].leagues[0],
+      focusClub: this.props.nations[0].leagues[0].clubs[0] 
+    };
   },
 
   startNewGame: function(e) {
     e.preventDefault();
-    console.log( 'woooooohooooooo' )
     ReactDOM.render(
-      <NewManagerBox />,
+      <NewManagerBox 
+        selectedClub={this.state.focusClub}>
+      </NewManagerBox>,
       document.getElementById( 'app' )
     )
   },
@@ -66,44 +42,26 @@ var NewGameBox = React.createClass({
   },
 
   render: function() {
-    return (
-      <section className="home-menu-wrapper">
+    if ( !this.props.nations ) { return( <h4>Waiting for data</h4> ) }
+    return(
+      <section className="__vertical-align">
         <div className="panel container-med row-90-height">
-          <div className="panel-header __text-large">
-            <div className="__float-left">Select team to manage</div>
-            <div className="__float-right">
-              <form className="inline-form __text-right" onSubmit={this.startNewGame}>
-                <NewGameSelectNation 
-                  nations={this.state.nations} 
-                  selectNation={this.setFocusNation}>
-                </NewGameSelectNation>
-                <NewGameSelectLeague
-                  nation={this.state.focusNation}
-                  selectLeague={this.setFocusLeague}> 
-                </NewGameSelectLeague>
-                <NewGameSubmit />
-              </form>
-            </div>
-          </div>
-          <div className="panel-content row">
-            <div className="column column-6 __border-r scroll-y">
-              <NewGameNationDetail 
-                nation={this.state.focusNation}
-                league={this.state.focusLeague}
-                selectClub={this.setFocusClub}>
-              </NewGameNationDetail>
-            </div>
-            <div className="column column-6">
-              <NewGameClubDetail 
-                club={this.state.focusClub}>
-              </NewGameClubDetail>
-            </div>
-          </div>
-        </div>
-      </section>
+          <NewGameSelect 
+            nations={this.props.nations} 
+            focusNation={this.state.focusNation}
+            selectNation={this.setFocusNation}
+            selectLeague={this.setFocusLeague}>
+          </NewGameSelect>
+          <NewGameLeagueDetails 
+            focusLeague={this.state.focusLeague}
+            focusClub={this.state.focusClub}
+            selectClub={this.setFocusClub}> 
+          </NewGameLeagueDetails> 
+        </div> 
+      </section>    
     )
   }
 
-})
+});
 
 module.exports = NewGameBox;
