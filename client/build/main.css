@@ -59,12 +59,19 @@ html, body {
   letter-spacing: 1px;
 }
 
+h1 { font-size: 24px; }
+h2 { font-size: 20px; }
+h3 { font-size: 18px; }
+h4 { font-size: 16px; }
+h5 { font-size: 14px; font-weight: 600; }
+h6 { font-size: 22px; font-weight: 600; }
+
 h1, h2, h3 {
   margin-top: 15px;
   margin-bottom: 15px;
 }
 
-h4, h5, h6 {
+h4, h5, h6, p {
   margin-top: 10px;
   margin-bottom: 10px;
 }

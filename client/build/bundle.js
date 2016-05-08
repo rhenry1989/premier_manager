@@ -36011,8 +36011,8 @@
 	      'figure',
 	      { className: 'card' },
 	      React.createElement(
-	        'h5',
-	        null,
+	        'h3',
+	        { className: '__text-grey' },
 	        'Start your career at:'
 	      ),
 	      React.createElement('div', { className: 'card-img round-logo', style: logoStyle }),
@@ -36023,7 +36023,7 @@
 	          'div',
 	          { className: 'card-title' },
 	          React.createElement(
-	            'h3',
+	            'h2',
 	            null,
 	            club.name,
 	            ' Football Club'
@@ -36043,8 +36043,8 @@
 	          'div',
 	          { className: 'card-content' },
 	          React.createElement(
-	            'div',
-	            { className: '__text-grey' },
+	            'p',
+	            null,
 	            club.description
 	          )
 	        ),
@@ -36332,12 +36332,12 @@
 	      React.createElement(
 	        'div',
 	        { className: 'column column-6 __border-r scroll-y __vertical-center-align' },
-	        React.createElement(NewManagerClub, { club: this.props.club })
+	        React.createElement(NewManagerPersonal, null)
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'column column-6 __vertical-center-align' },
-	        React.createElement(NewManagerPersonal, null)
+	        React.createElement(NewManagerClub, { club: this.props.club })
 	      )
 	    );
 	  }
@@ -36366,6 +36366,11 @@
 	    return React.createElement(
 	      'figure',
 	      { className: 'card' },
+	      React.createElement(
+	        'h4',
+	        { className: '__text-grey' },
+	        'You have been appointed manager of:'
+	      ),
 	      React.createElement('div', { className: 'card-img round-logo', style: logoStyle }),
 	      React.createElement(
 	        'figcaption',
@@ -36374,15 +36379,20 @@
 	          'div',
 	          { className: 'card-title' },
 	          React.createElement(
-	            'small',
-	            { className: '__text-grey' },
-	            'You have been appointed manager of:'
-	          ),
-	          React.createElement(
-	            'h4',
+	            'h2',
 	            null,
 	            club.name,
 	            ' Football Club'
+	          ),
+	          React.createElement(
+	            'small',
+	            null,
+	            React.createElement(
+	              'span',
+	              { className: '__text-grey' },
+	              'Founded: '
+	            ),
+	            club.founded
 	          )
 	        )
 	      )

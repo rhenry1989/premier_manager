@@ -8,10 +8,10 @@ var NewManagerDetails = React.createClass({
     return(
       <div className="panel-content row">
         <div className="column column-6 __border-r scroll-y __vertical-center-align">
-          <NewManagerClub club={this.props.club} />
+          <NewManagerPersonal />
         </div>
         <div className="column column-6 __vertical-center-align">
-          <NewManagerPersonal />
+          <NewManagerClub club={this.props.club} />
         </div>
       </div>
     )

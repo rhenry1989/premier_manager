@@ -9,11 +9,15 @@ var NewManagerClub = React.createClass({
     }
     return(
       <figure className="card">
+        <h4 className="__text-grey">You have been appointed manager of:</h4>
         <div className="card-img round-logo" style={logoStyle}></div>
         <figcaption>
           <div className="card-title">
-            <small className="__text-grey">You have been appointed manager of:</small>
-            <h4>{club.name} Football Club</h4>
+            <h2>{club.name} Football Club</h2>
+            <small>
+              <span className="__text-grey">Founded: </span> 
+              {club.founded}
+            </small>
           </div>
         </figcaption>
       </figure>

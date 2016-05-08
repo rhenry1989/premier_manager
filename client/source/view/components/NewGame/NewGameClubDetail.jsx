@@ -10,20 +10,20 @@ var NewGameClubDetail = React.createClass({
     }
     return (
       <figure className="card">
-        <h5>Start your career at:</h5>
+        <h3 className="__text-grey">Start your career at:</h3>
         <div className="card-img round-logo" style={logoStyle}></div>
         <figcaption>
           <div className="card-title">
-            <h3>{club.name} Football Club</h3>
+            <h2>{club.name} Football Club</h2>
             <small>
               <span className="__text-grey">Founded: </span> 
               {club.founded}
             </small>
           </div>
           <div className="card-content">
-            <div className="__text-grey">
+            <p>
               {club.description}
-            </div>
+            </p>
           </div>
           <div className="card-footer">
 
