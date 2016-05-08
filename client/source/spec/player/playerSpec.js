@@ -1,19 +1,11 @@
 describe( "Player", function() {
 
+  var players = require( '../api/players' )();
   var Player = require('../../player/player');
   var player;
 
   beforeEach(function() {
-    var options = {
-      name: 'Rick Henry',
-      technical: {
-        passing: 10
-      },
-      brain: {
-        decisions: 43
-      }
-    }
-    player = Player( options );
+    player = players[0];
   });
 
   it( 'should set posX and posY to null', function() {
@@ -25,6 +17,11 @@ describe( "Player", function() {
     player.setPos( 50, 100 );
     expect( player.posX ).toEqual( 50 );
     expect( player.posY ).toEqual( 100 );
+  });
+
+  it( 'should be able to set closest rival', function() {
+    player.setClosestOpposition( players[3] );
+    expect( player.closestOpposition.name ).toEqual( 'Cristiano Ronaldo' )
   });
 
   it( 'should be able to set distance from possession', function() {

@@ -5,23 +5,23 @@ var Decision = function() {
 
 var decisionProto = {
 
-  make: function( playerInPossession, players, pitch ) {
-    this.playerDistancesFromPossession( players, playerInPossession );
-    var distanceLPost = this.distanceFromLPost( playerInPossession );
-    var distanceRPost = this.distanceFromRPost( playerInPossession );
+  make: function( pip, players, pitch ) {
+    this.playerDistancesFromPossession( players, pip );
+    var distanceLPost = this.distanceFromLPost( pip );
+    var distanceRPost = this.distanceFromRPost( pip );
 
-    if ( this.shootingOpportunity( playerInPossession ) ) {
+    if ( this.shootingOpportunity( pip ) ) {
       return 'shoot'
     }
     return 'pass'
   },
 
-  shootingOpportunity: function( playerInPossession ) {
-    var distanceX = ( playerInPossession.technical.shooting / 2 );
-    if ( playerInPossession.posX > distanceX ) {
+  shootingOpportunity: function( pip ) {
+    var distanceX = ( pip.technical.shooting / 2 );
+    if ( pip.posX > distanceX ) {
       return false;
     }
-    if ( playerInPossession.posY > 10 && playerInPossession.posY < 80 ) {
+    if ( pip.posY > 10 && pip.posY < 80 ) {
       return true;
     }
   },
@@ -32,18 +32,18 @@ var decisionProto = {
     return Math.sqrt( diffX*diffX + diffY*diffY );
   },
 
-  distanceFromLPost: function( playerInPossession ) {
-    return this.distanceCalculator( 0, 48.71, playerInPossession.posY, playerInPossession.posX )
+  distanceFromLPost: function( pip ) {
+    return this.distanceCalculator( 0, 48.71, pip.posY, pip.posX )
   },
 
-  distanceFromRPost: function( playerInPossession ) {
-    return this.distanceCalculator( 0, 41.29, playerInPossession.posY, playerInPossession.posX )
+  distanceFromRPost: function( pip ) {
+    return this.distanceCalculator( 0, 41.29, pip.posY, pip.posX )
   },
 
-  playerDistancesFromPossession: function( players, playerInPossession ) {
+  playerDistancesFromPossession: function( players, pip ) {
     for ( player of players ) {
       if ( player.possession === false ) {
-        var distance = this.distanceCalculator( player.posX, player.posY, playerInPossession.posY, playerInPossession.posX );
+        var distance = this.distanceCalculator( player.posX, player.posY, pip.posY, pip.posX );
         player.updateDistanceFromPossession( distance );
       }
     }

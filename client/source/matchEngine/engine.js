@@ -1,3 +1,4 @@
+var _ = require( 'lodash' );
 var Pass = require( './pass' );
 var Decision = require( './decision' );
 var Pitch = require( './pitch' )
@@ -14,14 +15,12 @@ var Engine = function() {
 var engineProto = {
 
   play: function() {
-    var i = 0;
-    while ( i < 10 ) {
-      var decision = this.decision.make( this.findPlayerInPossession(), this.players, this.pitch );
-      if ( decision.goingTo === 'pass' ) {
-        this.makePass( decision );
-      }
-      i++
+    var decision = this.decision.make( this.findPlayerInPossession(), this.players, this.pitch );
+    var lookup = {
+      'pass' : this.makePass(),
+      'shoot': this.makeShot()
     }
+    lookup[decision];
   },
 
   findPlayerInPossession: function() {
@@ -32,8 +31,12 @@ var engineProto = {
     }
   },
 
-  makePass: function( options ) {
-    this.pass.attempt( options );
+  makeShot: function() {
+
+  },
+
+  makePass: function() {
+    this.pass.attempt();
   },
 
   addPlayer: function( player ) {

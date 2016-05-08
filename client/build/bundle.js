@@ -19724,7 +19724,9 @@
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
+	var _ = __webpack_require__(161);
 	var NewGameSelectNation = __webpack_require__(163);
+	var NewGameSelectLeague = __webpack_require__(326);
 	var NewGameNationDetail = __webpack_require__(164);
 	var NewGameClubDetail = __webpack_require__(165);
 	var ClubDashboard = __webpack_require__(166);
@@ -19734,20 +19736,26 @@
 	
 	
 	  getInitialState: function getInitialState() {
-	    return { nations: [], focusNation: null, focusClub: null };
+	    return {
+	      nations: [],
+	      focusNation: null,
+	      focusLeague: null,
+	      focusClub: null
+	    };
 	  },
 	
 	  componentDidMount: function componentDidMount() {
-	    var url = "http://localhost:3000/nations";
+	    var url = "http://localhost:3000/nations?leagues=true&clubs=true";
 	    var request = new XMLHttpRequest();
 	    request.open("GET", url);
 	    request.onload = function () {
 	      if (request.status === 200) {
-	        var data = JSON.parse(request.responseText);
+	        var nations = JSON.parse(request.responseText);
 	        this.setState({
-	          nations: data,
-	          focusNation: data[0],
-	          focusClub: data[0].clubs[0]
+	          nations: nations,
+	          focusNation: nations[0],
+	          focusLeague: nations[0].leagues[0],
+	          focusClub: nations[0].leagues[0].clubs[0]
 	        });
 	      }
 	    }.bind(this);
@@ -19755,12 +19763,22 @@
 	  },
 	
 	  startNewGame: function startNewGame() {
-	
 	    ReactDOM.render(React.createElement(ClubDashboard, null), document.getElementById('app'));
 	  },
 	
 	  setFocusNation: function setFocusNation(nation) {
-	    this.setState({ focusNation: nation });
+	    this.setState({
+	      focusNation: nation,
+	      focusLeague: nation.leagues[0],
+	      focusClub: nation.leagues[0].clubs[0]
+	    });
+	  },
+	
+	  setFocusLeague: function setFocusLeague(league) {
+	    this.setState({
+	      focusLeague: league,
+	      focusClub: league.clubs[0]
+	    });
 	  },
 	
 	  setFocusClub: function setFocusClub(club) {
@@ -19788,7 +19806,16 @@
 	            React.createElement(NewGameSelectNation, {
 	              nations: this.state.nations,
 	              selectNation: this.setFocusNation,
-	              startGame: this.startNewGame })
+	              startGame: this.startNewGame }),
+	            React.createElement(NewGameSelectLeague, {
+	              nation: this.state.focusNation,
+	              selectLeague: this.setFocusLeague }),
+	            React.createElement(
+	              'button',
+	              { type: 'submit', className: 'button button-simple button-w-icon' },
+	              'Start Game',
+	              React.createElement('i', { className: 'fa fa-chevron-circle-right', 'aria-hidden': 'true' })
+	            )
 	          )
 	        ),
 	        React.createElement(
@@ -19799,6 +19826,7 @@
 	            { className: 'column column-6 __border-r scroll-y' },
 	            React.createElement(NewGameNationDetail, {
 	              nation: this.state.focusNation,
+	              league: this.state.focusLeague,
 	              selectClub: this.setFocusClub })
 	          ),
 	          React.createElement(
@@ -35879,12 +35907,12 @@
 	
 	
 	  getInitialState: function getInitialState() {
-	    return { selectedIndex: this.props.nations[0] };
+	    return { selectedIndex: 0 };
 	  },
 	
-	  handleChange: function handleChange(e) {
+	  onNationChange: function onNationChange(e) {
 	    var newIndex = e.target.value;
-	    this.setState({ selectedIndex: newIndex });
+	    this.setState({ selectedIndex: Number(newIndex) });
 	    this.props.selectNation(this.props.nations[newIndex]);
 	  },
 	
@@ -35895,7 +35923,7 @@
 	  },
 	
 	  render: function render() {
-	    var options = this.props.nations.map(function (nation, index) {
+	    var nations = this.props.nations.map(function (nation, index) {
 	      return React.createElement(
 	        'option',
 	        { value: index, key: index },
@@ -35910,43 +35938,14 @@
 	        { className: 'dropdown-w-icon __margin-r-sm' },
 	        React.createElement(
 	          'select',
-	          { className: 'dropdown', value: this.state.selectedIndex, onChange: this.handleChange },
-	          options
+	          { className: 'dropdown', value: this.state.selectedIndex, onChange: this.onNationChange },
+	          nations
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'dropdown-icon' },
 	          React.createElement('i', { className: 'fa fa-chevron-circle-down', 'aria-hidden': 'true' })
 	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'dropdown-w-icon __margin-r-sm' },
-	        React.createElement(
-	          'select',
-	          { className: 'dropdown' },
-	          React.createElement(
-	            'option',
-	            null,
-	            'Premier Division'
-	          ),
-	          React.createElement(
-	            'option',
-	            null,
-	            'First Division'
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'dropdown-icon' },
-	          React.createElement('i', { className: 'fa fa-chevron-circle-down', 'aria-hidden': 'true' })
-	        )
-	      ),
-	      React.createElement(
-	        'button',
-	        { type: 'submit', className: 'button button-simple button-w-icon' },
-	        'Start Game',
-	        React.createElement('i', { className: 'fa fa-chevron-circle-right', 'aria-hidden': 'true' })
 	      )
 	    );
 	  }
@@ -35974,24 +35973,26 @@
 	  handleClick: function handleClick(e) {
 	    var newIndex = e.target.value;
 	    this.setState({ selectedIndex: newIndex });
-	    this.props.selectClub(this.props.nation.clubs[newIndex]);
+	    this.props.selectClub(this.props.league.clubs[newIndex]);
 	  },
 	
 	  render: function render() {
-	    if (!this.props.nation) {
+	    if (!this.props.league) {
 	      return React.createElement(
 	        "h4",
 	        null,
 	        " No Country Selected "
 	      );
 	    }
-	    var clubs = this.props.nation.clubs.map(function (club, index) {
+	
+	    var clubs = this.props.league.clubs.map(function (club, index) {
 	      return React.createElement(
 	        "li",
 	        { className: "panel-list-item", key: index, value: index, onClick: this.handleClick },
 	        club.name
 	      );
 	    }.bind(this));
+	
 	    return React.createElement(
 	      "ul",
 	      { className: "panel-list" },
@@ -55650,6 +55651,61 @@
 	
 	module.exports = deprecated;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 325 */,
+/* 326 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	
+	var NewGameSelectLeague = React.createClass({
+	  displayName: "NewGameSelectLeague",
+	
+	
+	  onLeagueChange: function onLeagueChange(e) {
+	    var newIndex = e.target.value;
+	    this.props.selectLeague(this.props.nation.leagues[newIndex]);
+	  },
+	
+	  render: function render() {
+	    if (!this.props.nation) {
+	      return React.createElement(
+	        "h4",
+	        null,
+	        "waiting for data"
+	      );
+	    }
+	
+	    var leagues = this.props.nation.leagues.map(function (league, index) {
+	      return React.createElement(
+	        "option",
+	        { key: index, value: index },
+	        league.name
+	      );
+	    });
+	
+	    return React.createElement(
+	      "div",
+	      { className: "dropdown-w-icon __margin-r-sm" },
+	      React.createElement(
+	        "select",
+	        { className: "dropdown", onChange: this.onLeagueChange },
+	        leagues
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "dropdown-icon" },
+	        React.createElement("i", { className: "fa fa-chevron-circle-down", "aria-hidden": "true" })
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewGameSelectLeague;
 
 /***/ }
 /******/ ]);

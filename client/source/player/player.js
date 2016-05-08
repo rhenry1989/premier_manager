@@ -1,6 +1,7 @@
 var Player = function( options ) {
   var player = Object.create( playerProto );
   player.id = options.id;
+  player.club_id = options.club_id;
   player.name = options.name;
   player.nation = options.nation;
   player.technical = options.technical;
@@ -9,41 +10,40 @@ var Player = function( options ) {
   player.posY = null;
   player.possession = false;
   player.distanceFromPossession = null;
+  player.closestOpposition = null;
   return player;
 }
 
 var playerProto = {
 
+  setClosestOpposition: function( player ) {
+    this.closestOpposition = player
+  },
+
   updateDistanceFromPossession: function( distance ) {
     this.distanceFromPossession = distance;
-    return this;
   },
 
   setPos: function( x, y ) {
     this.posX = x;
     this.posY = y;
-    return this;
   },
 
   clearPos: function() {
     this.posX = null;
     this.posY = null;
-    return this;
   },
 
   gainPossession: function() {
     this.possession = true;
-    return this;
   },
 
   losePossession: function() {
     this.possession = false;
-    return this;
   },
 
   resetDistanceFromPossession: function() {
     this.distanceFromPossession = null;
-    return this;
   }
 
 }
