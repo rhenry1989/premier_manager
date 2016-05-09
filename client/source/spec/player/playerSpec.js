@@ -29,6 +29,11 @@ describe( "Player", function() {
     expect( player.distanceFromPossession ).toEqual( 70 );
   });
 
+  it( 'should be able to set danger of position', function() {
+    player.setDanger(75);
+    expect( player.danger ).toEqual( 75 );
+  })
+
   describe( 'when a player has a position', function() {
 
     beforeEach( function() {

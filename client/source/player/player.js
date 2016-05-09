@@ -8,6 +8,7 @@ var Player = function( options ) {
   player.brain = options.brain;
   player.posX = null;
   player.posY = null;
+  player.danger = null;
   player.possession = false;
   player.distanceFromPossession = null;
   player.closestOpposition = null;
@@ -27,6 +28,10 @@ var playerProto = {
   setPos: function( x, y ) {
     this.posX = x;
     this.posY = y;
+  },
+
+  setDanger: function( value ) {
+    this.danger = value;
   },
 
   clearPos: function() {

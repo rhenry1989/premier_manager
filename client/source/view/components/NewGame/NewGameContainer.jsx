@@ -23,10 +23,23 @@ var NewGameContainer = React.createClass({
     request.send(null);
   },
 
+  createGame: function( callback ) {
+    var url = "http://localhost:3000/games";
+    var request = new XMLHttpRequest();
+    request.open( "POST", url );
+    request.onload = function() {
+      if(request.status === 200) {
+        var game = JSON.parse( request.responseText );
+        callback( game.id );
+      }
+    }
+    request.send(null)
+  },
+
   render: function() {
     if( !this.state.nations ) { return <h4>waiting for data</h4> }
     return (
-      <NewGameBox nations={this.state.nations} />
+      <NewGameBox nations={this.state.nations} createGame={this.createGame} />
     )
   }
 

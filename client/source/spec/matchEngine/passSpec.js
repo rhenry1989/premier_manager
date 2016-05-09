@@ -15,15 +15,4 @@ describe( 'Pass', function() {
     pass = Pass();      
   });
 
-  it( 'should offer potential options to pass to', function() {
-    var result = pass.options( players );
-    expect( result.length ).toEqual( 2 );
-  });
-
-  it( 'should select the player closest to goal', function() {
-    var options = pass.options( players );
-    var result = pass.select( options );
-    expect( result.name ).toEqual( 'Rick Henry' );
-  });
-
 });

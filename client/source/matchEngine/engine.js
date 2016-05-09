@@ -3,12 +3,15 @@ var Pass = require( './pass' );
 var Decision = require( './decision' );
 var Pitch = require( './pitch' )
 
-var Engine = function() {
+var Engine = function( players ) {
   var engine = Object.create( engineProto );
-  engine.players = [];
+  engine.players = players;
   engine.pitch = Pitch( 120, 90 );
   engine.decision = Decision();
   engine.pass = Pass();
+  engine.pIP;
+  engine.teamMates = [];
+  engine.opponents = [];
   return engine;
 }
 
@@ -23,31 +26,33 @@ var engineProto = {
     lookup[decision];
   },
 
-  findPlayerInPossession: function() {
-    for ( player of this.players ) {
-      if ( player.possession === true ) { 
-        return player; 
-      }
+  setPlayerDanger: function( player ) {
+    var x = (100 - player.posX);
+    if( player.posY >= 45 ) {
+      var y = player.posY - 45;
+    }
+    var y = 45 - player.posY;
+    player.setDanger(x - y);
+  },
+
+  setOpponent: function( player ) {
+    if ( player.club_id !== this.pIP.club_id ) {
+      this.opponents.push( player )
     }
   },
 
-  makeShot: function() {
+  setTeamMate: function( player ) {
+    if ( player.club_id === this.pIP.club_id ) { 
+      this.teamMates.push( player );
+    }
+  },
 
+  setPlayerInPossession: function( player ) {
+    if ( player.possession === true ) { this.pIP = player; }
   },
 
   makePass: function() {
     this.pass.attempt();
-  },
-
-  addPlayer: function( player ) {
-    this.players.push( player );
-    return this;
-  },
-
-  addPlayers: function( players ) {
-    for ( player of players ) {
-      this.addPlayer( player );
-    }
   }
 
 }

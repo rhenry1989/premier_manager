@@ -15,13 +15,15 @@ var NewGameBox = React.createClass({
   },
 
   startGame: function() {
-    // POST request to server to create game - dealt with by container
-    ReactDOM.render(
-      <NewManagerContainer 
-        selectedClub={this.state.focusClub}>
-      </NewManagerContainer>,
-      document.getElementById( 'app' )
-    )
+    this.props.createGame( function( game ) {
+      ReactDOM.render(
+        <NewManagerContainer 
+          selectedClub={this.state.focusClub}
+          game_id={game}>
+        </NewManagerContainer>,
+        document.getElementById( 'app' )
+      )
+    }.bind(this) );
   },
 
   setFocusNation: function(nation) {

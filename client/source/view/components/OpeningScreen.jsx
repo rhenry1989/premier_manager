@@ -11,6 +11,13 @@ var OpeningScreen = React.createClass({
     )
   },
 
+  loadGame: function() {
+    ReactDOM.render(
+      <LoadGameContainer />,
+      document.getElementById( 'app' )
+    )
+  },
+
   render: function() {
     return (
       <section className="home-menu-wrapper">
