@@ -20,12 +20,12 @@ describe( "Player", function() {
   });
 
   it( 'should be able to set closest rival', function() {
-    player.setClosestOpposition( players[3] );
+    player.setClosestOpponent( players[3] );
     expect( player.closestOpposition.name ).toEqual( 'Cristiano Ronaldo' )
   });
 
   it( 'should be able to set distance from possession', function() {
-    player.updateDistanceFromPossession( 70 );
+    player.setDistanceFromPossession( 70 );
     expect( player.distanceFromPossession ).toEqual( 70 );
   });
 

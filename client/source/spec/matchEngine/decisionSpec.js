@@ -40,53 +40,48 @@ describe( 'Decision', function() {
       players = [ player1, player2 ];
     });
 
-    it( 'should be able to calculate a distance', function() {
-      var result = decision.distanceCalculator( 0, 0, 100, 100);
-      expect( result ).toEqual( 141.4213562373095 );
-    });
-
     describe( 'when a player has possession', function() {
 
       beforeEach( function() {
-        playerInPossession = players[1];
+        // playerInPossession = players[1];
       });
 
-      it( 'should calculate distance from left post', function() {
-        var result = decision.distanceFromLPost( playerInPossession );
-        expect( result ).toEqual( 112.38622735904966 );
-      });
+      // it( 'should calculate distance from left post', function() {
+      //   var result = decision.distanceFromLPost( playerInPossession );
+      //   expect( result ).toEqual( 112.38622735904966 );
+      // });
 
-      it( 'should calculate distance from right post', function() {
-        var result = decision.distanceFromRPost( playerInPossession );
-        expect( result ).toEqual( 115.96061443438458 );
-      });
+      // it( 'should calculate distance from right post', function() {
+      //   var result = decision.distanceFromRPost( playerInPossession );
+      //   expect( result ).toEqual( 115.96061443438458 );
+      // });
 
       describe( 'when a player makes a decision', function() {
 
         beforeEach( function() {
-          decision.playerDistancesFromPossession( players, playerInPossession );
+          // decision.playerDistancesFromPossession( players, playerInPossession );
         });
 
-        it( 'should select option when in possession', function() {
-          var result = decision.make( players[1], players );
-          expect( result ).toEqual( 'pass' );
-        });
+        // it( 'should select option when in possession', function() {
+        //   var result = decision.make( players[1], players );
+        //   expect( result ).toEqual( 'pass' );
+        // });
 
-        it( 'should return false when player not in a shooting position', function() {
-          var result = decision.shootingOpportunity( playerInPossession )
-          expect( result ).toEqual( false );
-        });
+        // it( 'should return false when player not in a shooting position', function() {
+        //   var result = decision.shootingOpportunity( playerInPossession )
+        //   expect( result ).toEqual( false );
+        // });
 
         describe( 'when a player is in a shooting position', function() {
 
           beforeEach( function() {
-            playerInPossession.setPos( 10, 50 );
+            // playerInPossession.setPos( 10, 50 );
           });
 
-          it( 'should return true if in shooting bounds', function() {
-            var result = decision.shootingOpportunity( playerInPossession );
-            expect( result ).toEqual( true );
-          });
+          // it( 'should return true if in shooting bounds', function() {
+          //   var result = decision.shootingOpportunity( playerInPossession );
+          //   expect( result ).toEqual( true );
+          // });
 
         });
 

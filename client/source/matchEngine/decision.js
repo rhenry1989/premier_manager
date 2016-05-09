@@ -26,12 +26,6 @@ var decisionProto = {
     }
   },
 
-  distanceCalculator: function( posXA, posYA, posXB, posYB ) {
-    var diffX = Math.abs( posXA - posXB );
-    var diffY = Math.abs( posYA - posYB );
-    return Math.sqrt( diffX*diffX + diffY*diffY );
-  },
-
   distanceFromLPost: function( pip ) {
     return this.distanceCalculator( 0, 48.71, pip.posY, pip.posX )
   },
@@ -39,15 +33,6 @@ var decisionProto = {
   distanceFromRPost: function( pip ) {
     return this.distanceCalculator( 0, 41.29, pip.posY, pip.posX )
   },
-
-  playerDistancesFromPossession: function( players, pip ) {
-    for ( player of players ) {
-      if ( player.possession === false ) {
-        var distance = this.distanceCalculator( player.posX, player.posY, pip.posY, pip.posX );
-        player.updateDistanceFromPossession( distance );
-      }
-    }
-  }
 
 }
 

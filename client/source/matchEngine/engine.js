@@ -51,6 +51,17 @@ var engineProto = {
     if ( player.possession === true ) { this.pIP = player; }
   },
 
+  twoPointsDistance: function( posXA, posYA, posXB, posYB ) {
+    var diffX = Math.abs( posXA - posXB );
+    var diffY = Math.abs( posYA - posYB );
+    return Math.sqrt( diffX*diffX + diffY*diffY );
+  },
+
+  setDistanceFromPossession: function( player ) {
+    var distance = this.twoPointsDistance( player.posX, player.posY, this.pIP.posX, this.pIP.posY );
+    player.setDistanceFromPossession( distance );
+  },
+
   makePass: function() {
     this.pass.attempt();
   }

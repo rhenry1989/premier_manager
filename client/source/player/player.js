@@ -11,17 +11,17 @@ var Player = function( options ) {
   player.danger = null;
   player.possession = false;
   player.distanceFromPossession = null;
-  player.closestOpposition = null;
+  player.closestOpponent = null;
   return player;
 }
 
 var playerProto = {
 
-  setClosestOpposition: function( player ) {
+  setClosestOpponent: function( player ) {
     this.closestOpposition = player
   },
 
-  updateDistanceFromPossession: function( distance ) {
+  setDistanceFromPossession: function( distance ) {
     this.distanceFromPossession = distance;
   },
 
