@@ -107,26 +107,54 @@ h4, h5, h6, p {
   margin-bottom: 30px;
 }
 
-.game-nav {
-  height: 40px;
+.horizontal-list {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 6px;
+}
+
+.horizontal-list-item {
+  border: 1px solid #e5e5e5;
+}
+
+.horizontal-list-item:hover {
+  outline: 1px solid #3498db;
+  border: 1px solid transparent;
+  cursor: auto;
+}
+
+.horizontal-list-item + .horizontal-list-item {
+  margin-left: 6px;
+}
+
+/* Toasts */
+
+.toast {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+}
+
+.toast-close {
+  text-align: center;
+  color: white;
+  padding: 8px 0;
+  font-size: 14px;
   background-color: #3498db;
+  border-bottom: 1px solid transparent;
 }
 
-.game-nav-list {
-  padding: 0 10px;
-  list-style-type: none;
-  line-height: 40px;
+.toast-close:hover {
+  background-color: white;
+  color: #3498db;
+  border-bottom: 1px solid #3498db;
+  cursor:pointer;
 }
 
-.game-nav-list li {
-  margin-right: 10px;
-  float: left;
-  color: #fff;
-}
+.toast-content {
 
-.game-nav-list li:hover {
-  color: #e5e5e5;
-  cursor: pointer;
 }
 
 /* Panels */
@@ -311,6 +339,11 @@ h4, h5, h6, p {
   outline: none;
 }
 
+.button:hover, 
+.button:active {
+  cursor: pointer;
+}
+
 .button-w-icon {
   padding-right: 34px;
 }
@@ -334,9 +367,19 @@ h4, h5, h6, p {
   border: 1px solid #3498db;
 }
 
-.button:hover, 
-.button:active {
-  cursor: pointer;
+.button-horizontal-list {
+  background-color: #3498db;
+  color: white;
+  border: 1px solid transparent;
+}
+
+.button-horizontal-list:hover,
+.button-horizontal-list:active {
+  outline: none;
+  cursor:pointer;
+  background-color: white;
+  border: 1px solid #3498db;
+  color: #3498db;
 }
 
 /* Forms & Inputs */
@@ -398,6 +441,37 @@ h4, h5, h6, p {
   top: 5px;
 }
 
+/* Tables */
+
+table {
+  margin: 15px 0;
+  width: 100%;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+table thead tr th {
+  text-align: left;
+  padding: 12px 4px;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+table tbody tr td {
+  padding: 6px 4px;
+  font-size: 0.9em;
+  font-weight: 100;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+  background-color: #3498db;
+  color: white;
+}
+
 /* Helpers */
 
 small {
@@ -424,6 +498,10 @@ small {
   color: #b1b1b1;
 }
 
+.__margin-all {
+  margin: 6px;
+}
+
 .__margin-r-sm {
   margin-right: 6px;
 }
@@ -438,6 +516,10 @@ small {
 
 .__float-left {
   float: left;
+}
+
+.__border-all {
+  border: 1px solid #e5e5e5;
 }
 
 .__border-l {
@@ -459,6 +541,10 @@ small {
   justify-content: center;
   -webkit-justify-content: center;
   height: 100%;
+}
+
+.__flex-display {
+  display: flex;
 }
 
 .scroll-y {
