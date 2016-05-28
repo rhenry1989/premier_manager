@@ -1,6 +1,6 @@
 var React = require( 'react' );
 var ReactDOM = require( 'react-dom' );
-var $ = require( 'jquery' );
+
 var NewManagerSubmit = require( './NewManagerSubmit' );
 var NewManagerDetails = require( './NewManagerDetails' );
 var ClubDashboard = require( '../Club/ClubDashboard' );
@@ -30,19 +30,21 @@ var NewManagerContainer = React.createClass({
   },
 
   createManager: function() {
+    var manager = this.state;
     var url = "http://localhost:3000/managers";
-    $.ajax({
-      type: "POST",
-      url: url,
-      data: this.state,
-      success: function( res ) {
+
+    var request = new XMLHttpRequest();
+    request.open( "POST", url, true );
+    request.setRequestHeader( "Content-Type", "application/json" );
+    request.onload = function() {
+      if ( request.status === 200 ) {
         ReactDOM.render(
           <ClubDashboard />,
           document.getElementById( 'app' )
         )
-      }.bind(this),
-      dataType: 'JSON'
-    });
+      }
+    }.bind( this )
+    request.send( JSON.stringify(manager) )
   },
 
   render: function() {

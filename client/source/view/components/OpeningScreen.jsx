@@ -2,6 +2,8 @@ var React = require( 'react' );
 var ReactDOM = require( 'react-dom' );
 var NewGameContainer = require( './NewGame/NewGameContainer.jsx' );
 var LoadGameContainer = require( './LoadGame/LoadGameContainer.jsx' );
+var GameActions = require( '../../actions/GameActions' );
+
 
 var OpeningScreen = React.createClass({
 
@@ -13,10 +15,11 @@ var OpeningScreen = React.createClass({
   },
 
   loadGame: function() {
-    ReactDOM.render(
-      <LoadGameContainer close={this.closeToast} />,
-      document.getElementById( 'toast' )
-    )
+    // ReactDOM.render(
+    //   <LoadGameContainer close={this.closeToast} />,
+    //   document.getElementById( 'toast' )
+    // )
+  
   },
 
   closeToast: function() {

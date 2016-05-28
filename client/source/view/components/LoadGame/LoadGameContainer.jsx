@@ -3,7 +3,6 @@ var ReactDOM = require( 'react-dom' );
 
 var LoadGameList = require( './LoadGameList' );
 var ClubContainer = require( '../Club/ClubContainer' );
-var $ = require( 'jquery' );
 
 var LoadGameContainer = React.createClass({
 
@@ -25,10 +24,7 @@ var LoadGameContainer = React.createClass({
   },
 
   componentDidMount: function() {
-    var url = "http://localhost:3000/games"
-    $.get( url, function(games) {
-      this.setState({ games: games });
-    }.bind(this) )
+    GameActions.loadGames();
   },
 
   render: function() {
