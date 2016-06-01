@@ -1,15 +1,25 @@
-module.exports = {
+var xhr = function(url, store) {
+  this.url = url;
+  this.store = store;
+}
 
-  getJSON: function(url, callback) {
+xhr.prototype = {
+
+  fetch: function() {
     var request = new XMLHttpRequest();
-    request.open("GET", url);
+    request.open("GET", this.url);
     request.onload = function() {
       if (request.status === 200) {
         var response = JSON.parse(request.responseText);
-        callback(response);
+        this.store.dispatch({
+          type: 'RECEIVE_GAMES',
+          games: response
+        })
       }
-    }
+    }.bind(this);
     request.send(null);
   }
 
 };
+
+module.exports = xhr;

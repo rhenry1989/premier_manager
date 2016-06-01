@@ -1,4 +1,3 @@
-var ServerActionCreators = require( '../actions/ServerActionCreators' );
 var API = "http://localhost:3000/";
 var xhr = require( '../lib/xhr' );
 

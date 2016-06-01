@@ -1,14 +1,23 @@
 var React = require( 'react' );
 var ReactDOM = require( 'react-dom' );
-// var OpeningScreen = require( './view/components/OpeningScreen.jsx' );
-var Main = require( './view/components/main.jsx' )
-var _ = require('lodash');
+var Provider = require( 'react-redux' ).Provider;
+var OpeningScreen = require( './view/components/OpeningScreen.jsx' );
+var _ = require( 'lodash' );
+var XHR = require( './view/lib/xhr' );
 
-window.onload = function() {
+var store = require( './view/stores/GamesStore' );
 
+var xhr = new XHR( 'http://localhost:3000/games', store );
+
+var render = function () {
   ReactDOM.render(
-    <Main />,
+    <Provider store={store}>
+      <OpeningScreen />
+    </Provider>,
     document.getElementById( 'app' )
   )
+}
 
+window.onload = function() {
+  render();
 }

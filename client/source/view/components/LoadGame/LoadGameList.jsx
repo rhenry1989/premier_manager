@@ -10,11 +10,12 @@ var LoadGameList = React.createClass({
   },
 
   render: function() {
+    if (!this.props.games) return(<h4>Getting data...</h4>)
     var games = this.props.games.map(function(game, index){
       return(
       <li key={index} className="horizontal-list-item">
-        <LoadGameDetail 
-          game={this.props.games[index]}>  
+        <LoadGameDetail
+          game={this.props.games[index]}>
         </LoadGameDetail>
       </li>)
     }.bind(this));

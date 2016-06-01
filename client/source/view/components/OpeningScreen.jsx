@@ -1,9 +1,10 @@
 var React = require( 'react' );
 var ReactDOM = require( 'react-dom' );
+var connect = require( 'react-redux' ).connect;
+var actions = require( '../actions/GamesActions' );
+
 var NewGameContainer = require( './NewGame/NewGameContainer.jsx' );
 var LoadGameContainer = require( './LoadGame/LoadGameContainer.jsx' );
-var GameActions = require( '../../actions/GameActions' );
-
 
 var OpeningScreen = React.createClass({
 
@@ -15,18 +16,19 @@ var OpeningScreen = React.createClass({
   },
 
   loadGame: function() {
-    // ReactDOM.render(
-    //   <LoadGameContainer close={this.closeToast} />,
-    //   document.getElementById( 'toast' )
-    // )
-  
+    ReactDOM.render(
+      <LoadGameContainer games={this.props.games} />,
+      document.getElementById( 'toast' )
+    )
   },
 
-  closeToast: function() {
-    ReactDOM.unmountComponentAtNode(document.getElementById('toast'));
+  componentDidMount: function() {
+    this.props.dispatch( actions.fetchGamesIfNeeded() );
+    console.log( 'mounted' );
   },
 
   render: function() {
+    var dispatch = this.props.dispatch;
     return (
       <section className="home-menu-wrapper">
         <div className="home-menu">
@@ -38,7 +40,7 @@ var OpeningScreen = React.createClass({
               New game
               <i className="fa fa-arrow-circle-o-right __float-right" aria-hidden="true"></i>
             </div>
-            <div onClick={ this.loadGame } className="panel-list-item">
+            <div onClick={ function() { dispatch( actions.testGame() ) } } className="panel-list-item">
               Load game
               <i className="fa fa-arrow-circle-o-right __float-right" aria-hidden="true"></i>
             </div>
@@ -49,5 +51,11 @@ var OpeningScreen = React.createClass({
   }
 
 });
+
+var mapStateToProps = function( state ) {
+
+}
+
+OpeningScreen = connect()( OpeningScreen )
 
 module.exports = OpeningScreen;

@@ -6,14 +6,6 @@ var ClubContainer = require( '../Club/ClubContainer' );
 
 var LoadGameContainer = React.createClass({
 
-  getInitialState: function() {
-    return { games: [], selectedGameId: null }
-  },
-
-  setGameId: function( gameId ) {
-    this.setState({ selectedGameId: gameId })
-  },
-
   loadGame: function(e) {
     this.props.close();
     e.preventDefault();
@@ -23,17 +15,16 @@ var LoadGameContainer = React.createClass({
     )
   },
 
-  componentDidMount: function() {
-    GameActions.loadGames();
+  closeToast: function() {
+    ReactDOM.unmountComponentAtNode(document.getElementById('toast'));
   },
 
   render: function() {
     return(
-      <LoadGameList 
-        setId={this.setGameId}
-        games={this.state.games} 
-        load={this.loadGame} 
-        close={this.props.close} />
+      <LoadGameList
+        games={this.props.games}
+        load={this.loadGame}
+        close={this.closeToast} />
     )
   }
 
