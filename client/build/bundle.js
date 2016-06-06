@@ -46,22 +46,46 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(158);
-	var Provider = __webpack_require__(159).Provider;
-	var OpeningScreen = __webpack_require__(181);
-	var _ = __webpack_require__(186);
-	var XHR = __webpack_require__(367);
+	var _react = __webpack_require__(1);
 	
-	var store = __webpack_require__(368);
+	var _react2 = _interopRequireDefault(_react);
 	
-	var xhr = new XHR('http://localhost:3000/games', store);
+	var _reactDom = __webpack_require__(158);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _reactRedux = __webpack_require__(159);
+	
+	var _OpeningScreen = __webpack_require__(181);
+	
+	var _OpeningScreen2 = _interopRequireDefault(_OpeningScreen);
+	
+	var _xhr = __webpack_require__(367);
+	
+	var _xhr2 = _interopRequireDefault(_xhr);
+	
+	var _GamesStore = __webpack_require__(368);
+	
+	var _GamesStore2 = _interopRequireDefault(_GamesStore);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// var React = require( 'react' );
+	// var ReactDOM = require( 'react-dom' );
+	// var Provider = require( 'react-redux' ).Provider;
+	// var OpeningScreen = require( './view/components/OpeningScreen.jsx' );
+	// var _ = require( 'lodash' );
+	// var XHR = require( './view/lib/xhr' );
+	//
+	// var store = require( './view/stores/GamesStore' );
+	
+	var xhr = new _xhr2.default('http://localhost:3000/games', _GamesStore2.default);
 	
 	var render = function render() {
-	  ReactDOM.render(React.createElement(
-	    Provider,
-	    { store: store },
-	    React.createElement(OpeningScreen, null)
+	  _reactDom2.default.render(_react2.default.createElement(
+	    _reactRedux.Provider,
+	    { store: _GamesStore2.default },
+	    _react2.default.createElement(_OpeningScreen2.default, null)
 	  ), document.getElementById('app'));
 	};
 	
@@ -21224,60 +21248,68 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(158);
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(158);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// var React = require( 'react' );
+	// var ReactDOM = require( 'react-dom' );
 	var connect = __webpack_require__(159).connect;
 	var actions = __webpack_require__(182);
 	
 	var NewGameContainer = __webpack_require__(185);
 	var LoadGameContainer = __webpack_require__(361);
 	
-	var OpeningScreen = React.createClass({
+	var OpeningScreen = _react2.default.createClass({
 	  displayName: 'OpeningScreen',
 	
 	
 	  newGame: function newGame() {
-	    ReactDOM.render(React.createElement(NewGameContainer, null), document.getElementById('app'));
+	    _reactDom2.default.render(_react2.default.createElement(NewGameContainer, null), document.getElementById('app'));
 	  },
 	
 	  loadGame: function loadGame() {
-	    ReactDOM.render(React.createElement(LoadGameContainer, { games: this.props.games }), document.getElementById('toast'));
+	    var dispatch = this.props.dispatch;
+	    actions.requestGames()(dispatch);
+	    _reactDom2.default.render(_react2.default.createElement(LoadGameContainer, null), document.getElementById('toast'));
 	  },
 	
 	  componentDidMount: function componentDidMount() {
-	    this.props.dispatch(actions.fetchGamesIfNeeded());
 	    console.log('mounted');
 	  },
 	
 	  render: function render() {
-	    var dispatch = this.props.dispatch;
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      'section',
 	      { className: 'home-menu-wrapper' },
-	      React.createElement(
+	      _react2.default.createElement(
 	        'div',
 	        { className: 'home-menu' },
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'home-menu-logo' },
 	          'Premier Manager'
 	        ),
-	        React.createElement(
+	        _react2.default.createElement(
 	          'div',
 	          { className: 'panel' },
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
 	            { onClick: this.newGame, className: 'panel-list-item' },
 	            'New game',
-	            React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
+	            _react2.default.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            'div',
-	            { onClick: function onClick() {
-	                dispatch(actions.testGame());
-	              }, className: 'panel-list-item' },
+	            { onClick: this.loadGame, className: 'panel-list-item' },
 	            'Load game',
-	            React.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
+	            _react2.default.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
 	          )
 	        )
 	      )
@@ -21285,8 +21317,6 @@
 	  }
 	
 	});
-	
-	var mapStateToProps = function mapStateToProps(state) {};
 	
 	OpeningScreen = connect()(OpeningScreen);
 	
@@ -21304,8 +21334,16 @@
 	var gameActions = {
 	
 	  requestGames: function requestGames() {
-	    return {
-	      type: 'REQUEST_GAMES'
+	    return function (dispatch) {
+	      console.log('hit');
+	
+	      fetch('http://localhost:3000/games', {
+	        method: 'get'
+	      }).then(function (res) {
+	        return res.json();
+	      }).then(function (games) {
+	        dispatch(gameActions.receiveGames(games));
+	      });
 	    };
 	  },
 	
@@ -21321,11 +21359,8 @@
 	      type: 'DELETE_GAME',
 	      id: id
 	    };
-	  },
-	
-	  fetchGamesIfNeeded: function fetchGamesIfNeeded() {
-	    console.log('fetching games');
 	  }
+	
 	};
 	
 	module.exports = gameActions;
@@ -68425,15 +68460,53 @@
 
 	'use strict';
 	
-	var createStore = __webpack_require__(166).createStore;
-	var gamesReducer = __webpack_require__(369);
+	var _redux = __webpack_require__(166);
 	
-	var gamesStore = createStore(gamesReducer);
+	var _reduxThunk = __webpack_require__(369);
+	
+	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
+	
+	var _GamesReducer = __webpack_require__(370);
+	
+	var _GamesReducer2 = _interopRequireDefault(_GamesReducer);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var gamesStore = (0, _redux.applyMiddleware)(_reduxThunk2.default)(_redux.createStore)(_GamesReducer2.default); // var createStore = require( 'redux' ).createStore;
+	// var gamesReducer = require( '../reducers/GamesReducer' );
 	
 	module.exports = gamesStore;
 
 /***/ },
 /* 369 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	function createThunkMiddleware(extraArgument) {
+	  return function (_ref) {
+	    var dispatch = _ref.dispatch;
+	    var getState = _ref.getState;
+	    return function (next) {
+	      return function (action) {
+	        if (typeof action === 'function') {
+	          return action(dispatch, getState, extraArgument);
+	        }
+	
+	        return next(action);
+	      };
+	    };
+	  };
+	}
+	
+	var thunk = createThunkMiddleware();
+	thunk.withExtraArgument = createThunkMiddleware;
+	
+	exports['default'] = thunk;
+
+/***/ },
+/* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

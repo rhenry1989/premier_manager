@@ -4,9 +4,18 @@ var fetch = require( 'isomorphic-fetch' );
 var gameActions = {
 
   requestGames: function() {
-    return {
-      type: 'REQUEST_GAMES'
-    };
+    return function( dispatch ) {
+      console.log('hit');
+
+      fetch( 'http://localhost:3000/games', {
+        method: 'get'
+      }).then( res => {
+          return res.json()
+      }).then( games => {
+          dispatch( gameActions.receiveGames( games ) );
+      })
+
+    }
   },
 
   receiveGames: function( games ) {
@@ -21,10 +30,6 @@ var gameActions = {
       type: 'DELETE_GAME',
       id: id
     }
-  },
-
-  fetchGamesIfNeeded() {
-    console.log( 'fetching games' );
   }
 
 }
