@@ -15,16 +15,13 @@ var LoadGameContainer = React.createClass({
     )
   },
 
-  closeToast: function() {
-    ReactDOM.unmountComponentAtNode(document.getElementById('toast'));
-  },
-
   render: function() {
     return(
       <LoadGameList
         games={this.props.games}
         load={this.loadGame}
-        close={this.closeToast} />
+        closeToast={this.props.closeToast}
+        deleteGame={this.props.deleteGame} />
     )
   }
 

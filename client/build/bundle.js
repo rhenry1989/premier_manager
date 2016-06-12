@@ -21277,14 +21277,19 @@
 	  loadGame: function loadGame() {
 	    var dispatch = this.props.dispatch;
 	    actions.requestGames()(dispatch);
-	    _reactDom2.default.render(_react2.default.createElement(LoadGameContainer, null), document.getElementById('toast'));
-	  },
-	
-	  componentDidMount: function componentDidMount() {
-	    console.log('mounted');
 	  },
 	
 	  render: function render() {
+	    var loadGameContainer = _react2.default.createElement(LoadGameContainer, {
+	      games: this.props.games,
+	      closeToast: function closeToast() {
+	        dispatch(actions.closeLoadGames());
+	      },
+	      deleteGame: function deleteGame(id) {
+	        dispatch(actions.deleteGame(id));
+	      } });
+	    var dispatch = this.props.dispatch;
+	    var loadGamesView = this.props.gamesLoadedShowing ? loadGameContainer : null;
 	    return _react2.default.createElement(
 	      'section',
 	      { className: 'home-menu-wrapper' },
@@ -21312,13 +21317,16 @@
 	            _react2.default.createElement('i', { className: 'fa fa-arrow-circle-o-right __float-right', 'aria-hidden': 'true' })
 	          )
 	        )
-	      )
+	      ),
+	      loadGamesView
 	    );
 	  }
 	
 	});
 	
-	OpeningScreen = connect()(OpeningScreen);
+	OpeningScreen = connect(function (state) {
+	  return state;
+	})(OpeningScreen);
 	
 	module.exports = OpeningScreen;
 
@@ -21328,14 +21336,26 @@
 
 	'use strict';
 	
+	var _reactDom = __webpack_require__(158);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	var combineReducers = __webpack_require__(166).combineReducers;
 	var fetch = __webpack_require__(183);
 	
+	
 	var gameActions = {
+	
+	  closeLoadGames: function closeLoadGames() {
+	    return {
+	      type: 'CLOSE_LOAD_GAMES'
+	    };
+	  },
 	
 	  requestGames: function requestGames() {
 	    return function (dispatch) {
-	      console.log('hit');
 	
 	      fetch('http://localhost:3000/games', {
 	        method: 'get'
@@ -21355,6 +21375,7 @@
 	  },
 	
 	  deleteGame: function deleteGame(id) {
+	    console.log('hit', id);
 	    return {
 	      type: 'DELETE_GAME',
 	      id: id
@@ -58361,15 +58382,12 @@
 	    ReactDOM.render(React.createElement(ClubContainer, { game: this.state.selectedGameId }), document.getElementById('app'));
 	  },
 	
-	  closeToast: function closeToast() {
-	    ReactDOM.unmountComponentAtNode(document.getElementById('toast'));
-	  },
-	
 	  render: function render() {
 	    return React.createElement(LoadGameList, {
 	      games: this.props.games,
 	      load: this.loadGame,
-	      close: this.closeToast });
+	      closeToast: this.props.closeToast,
+	      deleteGame: this.props.deleteGame });
 	  }
 	
 	});
@@ -58389,12 +58407,6 @@
 	  displayName: 'LoadGameList',
 	
 	
-	  setGameId: function setGameId(e) {
-	    e.preventDefault;
-	    var newId = +e.target.value;
-	    this.props.setId(newId);
-	  },
-	
 	  render: function render() {
 	    if (!this.props.games) return React.createElement(
 	      'h4',
@@ -58406,7 +58418,8 @@
 	        'li',
 	        { key: index, className: 'horizontal-list-item' },
 	        React.createElement(LoadGameDetail, {
-	          game: this.props.games[index] })
+	          game: this.props.games[index],
+	          deleteGame: this.props.deleteGame })
 	      );
 	    }.bind(this));
 	
@@ -58415,7 +58428,7 @@
 	      { className: 'toast' },
 	      React.createElement(
 	        'div',
-	        { className: 'toast-close', onClick: this.props.close },
+	        { className: 'toast-close', onClick: this.props.closeToast },
 	        React.createElement('i', { className: 'fa fa-minus', 'aria-hidden': 'true' })
 	      ),
 	      React.createElement(
@@ -58454,10 +58467,6 @@
 	
 	var LoadGameDetail = React.createClass({
 	  displayName: 'LoadGameDetail',
-	  deleteGame: function deleteGame(e) {
-	    e.preventDefault();
-	    console.log(e.target.value);
-	  },
 	
 	
 	  render: function render() {
@@ -58480,7 +58489,9 @@
 	        'Select Game',
 	        React.createElement(
 	          'button',
-	          { type: 'submit', onClick: this.deleteGame, value: this.props.game.id },
+	          { type: 'button', onClick: function () {
+	              this.props.deleteGame(this.props.game.id);
+	            }.bind(this), value: this.props.game.id },
 	          'Delete '
 	        )
 	      )
@@ -68516,7 +68527,9 @@
 	
 	var initialState = {
 	  selectedGameId: null,
-	  games: []
+	  games: [],
+	  gamesLoaded: false,
+	  gamesLoadedShowing: false
 	};
 	
 	var games = function games(state, action) {
@@ -68525,12 +68538,18 @@
 	  }
 	
 	  switch (action.type) {
+	
+	    case 'CLOSE_LOAD_GAMES':
+	      return _.assign({}, state, { gamesLoadedShowing: false });
 	    case 'RECEIVE_GAMES':
-	      return _.assign({}, state, { games: action.games });
+	      return _.assign({}, state, { games: action.games, gamesLoaded: true, gamesLoadedShowing: true });
 	    case 'DELETE_GAME':
-	      return _.remove(state, function (g) {
-	        return n.id === action.id;
-	      }.bind(this));
+	      var index = _.findIndex(state.games, function (game) {
+	        return game.id === action.id;
+	      });
+	      var newGames = state.games.slice(0, index).concat(state.games.slice(index + 1));
+	      console.log(newGames);
+	      return _.assign({}, state, { games: newGames });
 	    default:
 	      return state;
 	  }

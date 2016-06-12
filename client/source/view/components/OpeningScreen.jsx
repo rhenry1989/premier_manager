@@ -21,17 +21,16 @@ var OpeningScreen = React.createClass({
   loadGame: function() {
     var dispatch = this.props.dispatch;
     actions.requestGames()( dispatch );
-    ReactDOM.render(
-      <LoadGameContainer />,
-      document.getElementById( 'toast' )
-    )
-  },
-
-  componentDidMount: function() {
-    console.log( 'mounted' );
   },
 
   render: function() {
+    var loadGameContainer = <LoadGameContainer
+      games={ this.props.games }
+      closeToast={ function() { dispatch( actions.closeLoadGames() );} }
+      deleteGame={ function(id) { dispatch( actions.deleteGame(id) ) } }>
+    </LoadGameContainer >;
+    var dispatch = this.props.dispatch;
+    var loadGamesView = this.props.gamesLoadedShowing ? loadGameContainer : null;
     return (
       <section className="home-menu-wrapper">
         <div className="home-menu">
@@ -49,12 +48,13 @@ var OpeningScreen = React.createClass({
             </div>
           </div>
         </div>
+        { loadGamesView }
       </section>
     )
   }
 
 });
 
-OpeningScreen = connect()( OpeningScreen )
+OpeningScreen = connect( state => state )( OpeningScreen )
 
 module.exports = OpeningScreen;
