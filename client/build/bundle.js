@@ -58491,7 +58491,7 @@
 	          'button',
 	          { type: 'button', onClick: function () {
 	              this.props.deleteGame(this.props.game.id);
-	            }.bind(this), value: this.props.game.id },
+	            }.bind(this) },
 	          'Delete '
 	        )
 	      )

@@ -15,7 +15,7 @@ var LoadGameDetail = React.createClass({
         </div>
         <div className="card-footer">
           <input type="radio" name="gameSelect" value={this.props.game.id} />Select Game
-          <button type="button" onClick={ function() { this.props.deleteGame(this.props.game.id) }.bind(this) } value={this.props.game.id}>Delete </button>
+          <button type="button" onClick={ function() { this.props.deleteGame(this.props.game.id) }.bind(this) }>Delete </button>
         </div>
       </figure>
     )
